@@ -37,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: "/meus-grupos",
     element: <Signup/>
+  },
+  {
+    path:"*",
+    element: <Profile/>
   }
 ])
 

@@ -3,6 +3,7 @@ import Header from "../components/Header"
 import { faCheck } from "@fortawesome/free-solid-svg-icons"
 export default function Home() {
   
+  
   return (
     <div className='m-0 p-0 box-border h-100 flex flex-col'>
       <Header/>

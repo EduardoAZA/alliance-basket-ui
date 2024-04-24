@@ -1,6 +1,21 @@
 import Header from "../components/Header"
+import { useEffect } from "react";
+import { useState } from "react";
+import api from "../services/api";
 
 export default function Profile() {
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    api
+      .get("/clients")
+      .then((response) => setUser(response.data))
+      .catch((err) => {
+        console.error("ops! ocorreu um erro" + err);
+      });
+  }, []);
+
+
   return (
     <div className="h-screen flex flex-col ">
       <Header />
