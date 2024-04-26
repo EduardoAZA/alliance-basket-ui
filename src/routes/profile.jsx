@@ -6,15 +6,18 @@ import api from "../services/api";
 export default function Profile() {
   const [user, setUser] = useState();
 
-  useEffect(() => {
-    api
-      .get("/clients")
-      .then((response) => setUser(response.data))
-      .catch((err) => {
-        console.error("ops! ocorreu um erro" + err);
+
+ useEffect(() => {
+    console.log("Making request to backend...");
+    api.get("/clients")
+      .then((response) => {
+        console.log("Received response from backend:", response.data);
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching clients:", error);
       });
   }, []);
-
 
   return (
     <div className="h-screen flex flex-col ">

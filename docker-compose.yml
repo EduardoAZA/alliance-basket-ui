@@ -7,6 +7,9 @@ services:
     volumes:
       - ./:/app
       - /app/node_modules
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    networks:
+      - alliance-basket
 
+networks:
+  alliance-basket:
+    external: true
