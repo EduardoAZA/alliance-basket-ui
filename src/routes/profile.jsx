@@ -9,10 +9,11 @@ export default function Profile() {
 
  useEffect(() => {
     console.log("Making request to backend...");
-    api.get("/clients")
+    api.get("/signup")
       .then((response) => {
         console.log("Received response from backend:", response.data);
         setUser(response.data);
+        
       })
       .catch((error) => {
         console.error("Error fetching clients:", error);
@@ -23,10 +24,10 @@ export default function Profile() {
     <div className="h-screen flex flex-col ">
       <Header />
       <div className="absolute bottom-6 right-6"><img src="/src/assets/images/profile.svg" className=" w-[24rem]" /></div>
-      <div className="absolute top-6 left-6"><img src="/src/assets/images/profile-2.svg" className=" w-[24rem]" /></div>
+      <div className="absolute top-24 left-6 "><img src="/src/assets/images/profile-2.svg" className=" w-[24rem]" /></div>
 
       <div className="flex-grow overflow-y-auto flex flex-col items-center justify-center">
-        <div className="shadow-custom  w-[25%] h-[70%] flex flex-col items-center p-10 justify-between">
+        <div className="shadow-mild w-[25%] h-[70%] flex flex-col items-center p-10 justify-between">
           <div className="flex flex-col items-center gap-4">
             <p className="text-3xl font-bold text-meteorite-dark">Perfil</p>
             <img className="w-[50%]" src="/src/assets/images/avatar.svg" alt="" />
