@@ -2,23 +2,35 @@ import Header from "../components/Header"
 import { useEffect } from "react";
 import { useState } from "react";
 import api from "../services/api";
+import { useParams } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+
 
 export default function Profile() {
-  const [user, setUser] = useState();
+  
+  const [user, setUser] = useState({ email: "", password: "" }); 
+  const { id } = useParams();
 
-
- useEffect(() => {
+  useEffect(() => {
     console.log("Making request to backend...");
-    api.get("/signup")
+    api.get(`/clients/${id}`, { headers: { 'authorization': localStorage.getItem('token') } })
       .then((response) => {
         console.log("Received response from backend:", response.data);
         setUser(response.data);
-        
       })
       .catch((error) => {
         console.error("Error fetching clients:", error);
       });
-  }, []);
+  }, [id]);
+
+
 
   return (
     <div className="h-screen flex flex-col ">
@@ -31,21 +43,30 @@ export default function Profile() {
           <div className="flex flex-col items-center gap-4">
             <p className="text-3xl font-bold text-meteorite-dark">Perfil</p>
             <img className="w-[50%]" src="/src/assets/images/avatar.svg" alt="" />
-    
           </div>
           <div className="w-full flex flex-col gap-8">
             <div className="w-full flex flex-col gap-2">
               <p className="text-xl font-bold">Nome</p>
-              <input type="text" className="w-full p-2 border-none outline-none bg-primary-light rounded-md" placeholder="Eduardo Affonso" />
+              <input type="text" className="w-full p-2 border-none outline-none bg-primary-light rounded-md" placeholder={user.email} />
             </div>
             <div>
               <p className="text-xl font-bold">Senha</p>
-              <input type="password" className="w-full p-2 border-none outline-none bg-primary-light rounded-md"placeholder="***********" />
+              <input type="password" className="w-full p-2 border-none outline-none bg-primary-light rounded-md" placeholder="********" />
             </div>
           </div>
-          <div className="w-3/5">
-            <button className="bg-primary w-full p-3 rounded-md text-white">Editar</button>
-          </div>
+            <Dialog>
+              <DialogTrigger className="w-3/5 bg-primary py-3 text-white font-bold rounded-md">
+                <button variant="outline">Edit Profile</button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Edit profile</DialogTitle>
+                  <DialogDescription>
+                    Make changes to your profile here. Click save when you're done.
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
         </div>
       </div>
     </div>

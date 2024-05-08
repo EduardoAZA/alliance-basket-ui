@@ -51,12 +51,13 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        primary_purple: {
+        primary: {
           DEFAULT: "#673de6;", 
-          light: "#ebe4ff", 
+          light: "#f4f5ff", 
           dark: "#5025d1", 
         },
         meteorite: {
+          meteorite: "#8c85ff",
           dark: "#2f1c6a",  
         },
         dark: "#1d1e20", 

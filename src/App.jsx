@@ -7,7 +7,7 @@ import Profile from "./routes/profile";
 export default function App() {
   return (
     <>
-      <Profile/>
+      <Home/>
     </>
   )
 }

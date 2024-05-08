@@ -6,33 +6,36 @@ import { useState } from "react";
 import { Link, createHashRouter } from "react-router-dom";
 import axios from "axios";
 import api from "@/services/api";
-
+import { useParams, useNavigate } from "react-router-dom";
 
 export default function Signup() {
- 
+  const navigate = useNavigate();
+
   const [details, setDetails] = useState({
-    name:'',
-    email:'',
-    password:'',
-    confirmPassword:'',
+    name: '',
+    email: '',
+    password: ''
   })
 
+  const {id} = useParams();
+
   const handleChange = (event) => {
-    const {name,value} = event.target
+    const { name, value } = event.target
     setDetails((prev) => {
-      return {...prev, [name] : value}
+      return { ...prev, [name]: value }
     })
   }
 
-  function createUser(details){
+  function createUser(details) {
     api.post('/clients', details)
-    .then((response) => {
-      toast("Received response from backend:", response.data);
-    })
-    .catch((error) => {
-      toast.error("Error fetching clients:", error);
-    });
-    
+      .then((response) => {
+        localStorage.setItem('token', response.data.token)
+        const id = response.data.user.id
+        return navigate(`/home/${id}`)
+      })
+      .catch((error) => {
+        toast.error("Email ja cadastrado", error);
+      });
   }
 
   const handleSubmit = (event) => {
@@ -42,27 +45,28 @@ export default function Signup() {
       toast.error("Por favor, preencha todos os campos.");
       return;
     }
-  
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(details.email)) {
       toast.error("Por favor, insira um email válido.");
       return;
     }
-  
+
     if (details.password !== details.confirmPassword) {
       toast.error("As senhas não coincidem.");
       return;
     }
-  
+
     createUser(details);
+
+
   }
 
-  
+
   return (
     <>
-
       <div className="absolute top-6 left-6">
-        <Link to="/" className="text-3xl text-primary font-bold cursor-pointer transition-all duration-300 hover:text-4xl">AllianceBasket</Link>
+        <Link to="/home" className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
       </div>
       <div className="w-full h-screen flex items-center justify-center bg-gradient-to-b from-white via-primary-light to-primary ">
         <div className="w-3/5 h-3/5  flex bg-white rounded-3xl shadow-md" >
@@ -85,43 +89,43 @@ export default function Signup() {
               <div className="w-full">
                 <div className="w-full my-4 flex items-center border-b border-solid border-silver">
                   <FontAwesomeIcon icon={faUser} className="text-dark" />
-                  <input 
-                  type="text" 
-                  placeholder="Nome" 
-                  className="w-full bg-transparent border-none outline-none px-4 py-3 text-lg"
-                  name="name"
-                  onChange={handleChange} />
+                  <input
+                    type="text"
+                    placeholder="Nome"
+                    className="w-full bg-transparent border-none outline-none px-4 py-3 text-lg"
+                    name="name"
+                    onChange={handleChange} />
                 </div>
 
                 <div className="w-full my-4 flex items-center border-b border-solid border-silver">
                   <FontAwesomeIcon icon={faEnvelope} className="text-dark" />
-                  <input 
-                  type="text" 
-                  placeholder="Email" 
-                  className="w-full bg-transparent border-none outline-none px-4 py-3 text-lg" 
-                  name="email"
-                  onChange={handleChange}
+                  <input
+                    type="text"
+                    placeholder="Email"
+                    className="w-full bg-transparent border-none outline-none px-4 py-3 text-lg"
+                    name="email"
+                    onChange={handleChange}
                   />
                 </div>
 
                 <div className="w-full my-4 flex items-center border-b border-solid border-silver">
                   <FontAwesomeIcon icon={faLock} className="text-dark" />
                   <input
-                  type="password"
-                  placeholder="Senha" 
-                  className="w-full bg-transparent border-none outline-none px-4 py-3 text-lg" 
-                  name="password"
-                  onChange={handleChange}
+                    type="password"
+                    placeholder="Senha"
+                    className="w-full bg-transparent border-none outline-none px-4 py-3 text-lg"
+                    name="password"
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="w-full my-4 flex items-center border-b border-solid border-silver">
                   <FontAwesomeIcon icon={faLock} className="text-dark" />
-                  <input 
-                  type="password" 
-                  placeholder="Confirmar Senha" 
-                  className="w-full bg-transparent border-none outline-none px-4 py-3 text-lg"
-                  name="confirmPassword"
-                  onChange={handleChange}
+                  <input
+                    type="password"
+                    placeholder="Confirmar Senha"
+                    className="w-full bg-transparent border-none outline-none px-4 py-3 text-lg"
+                    name="confirmPassword"
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -129,7 +133,7 @@ export default function Signup() {
             </form>
           </div>
         </div>
-        
+
       </div>
     </>
   )

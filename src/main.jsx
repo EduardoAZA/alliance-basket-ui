@@ -16,41 +16,41 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Home/>
+    path: "/home/:id?",
+    element: <Home />
   },
   {
-    path: "/profile",
-    element: <Profile/>
+    path: "/perfil/:id",
+    element: <Profile />
   },
   {
     path: "/login",
-    element: <Login/>
+    element: <Login />
   },
   {
     path: "/cadastro",
-    element: <Signup/>
+    element: <Signup />
   },
   {
     path: "/criar-grupo",
-    element: <CreateGroup/>
+    element: <CreateGroup />
   },
   {
     path: "/meus-grupos",
-    element: <Signup/>
+    element: <Signup />
   },
   {
-    path:"/entrar"
+    path: "/entrar"
   },
   {
-    path:"*",
-    element: <ErrorPage/>
+    path: "*",
+    element: <ErrorPage />
   }
 ])
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <RouterProvider router={router} />
-    <Toaster position="top-right" richColors  expand={true}/>
+    <Toaster position="top-right" richColors expand={true} />
   </React.StrictMode>
 );

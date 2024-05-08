@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faB, faBars, faChain, faCheck, faClose, faLongArrowAltUp, faSignOut, faU, faUser } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -18,29 +18,37 @@ export default function Header() {
 
     const [open, setOpen] = useState(false);
 
+    function handleMenuToggle() {
+        setOpen(!open);
+    }
+
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-
         const token = localStorage.getItem('token');
-
-        setIsLoggedIn(token);
+        setIsLoggedIn(!!token);
     }, []);
 
-    const handleLogout = () => {
+    function handleLogout() {
         localStorage.removeItem('token');
-    };
+        setIsLoggedIn(false);
+        window.location.href = '/home';
+    }
+
+    const { id } = useParams();
 
     return (
         <>
             <header className='sticky top-0 w-full bg-white z-100 p-3 shadow-md'>
 
                 <nav className='h-14 flex justify-between items-center pl-4 pr-4 md:px-10'>
-                    <Link to="/" className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
-
+                    {id ? (
+                        <Link to={`/home/${id}`} className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
+                    ) : (
+                        <Link to="/home" className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
+                    )}
                     <div className='ml-auto flex '>
-
-                        <ul className={`md:flex md:items-center md:pb-0 pb-12 absolute gap-5 md:static bg-white md:z-50 z-50 left-0 w-full md:w-auto md:pl-0 pl-9 transition-all ease-in`}>
+                        <ul className={`md:flex md:items-center md:pb-0 pb-12 absolute gap-5 md:static bg-white md:z-50 z-50 top-[78px] border-t md:border-t-0 pt-8 md:pt-0 left-0 w-full md:w-auto md:pl-0 pl-9 transition-all ease-in ${open ? '' : 'hidden'}`}>
                             {isLoggedIn ? (
                                 <>
                                     <li>
@@ -60,9 +68,7 @@ export default function Header() {
                             )}
                         </ul>
 
-                        <div className='text-xl cursor-pointer'>
-                            <FontAwesomeIcon icon={faClose} className='hidden' />
-                        </div>
+
                     </div>
 
                     <div className=' flex items-center gap-4 pl-10 '>
@@ -73,13 +79,13 @@ export default function Header() {
                                     <DropdownMenuLabel className="text-center">Meu perfil</DropdownMenuLabel>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem>
-                                        <Link to="/profile" className='flex items-center gap-3'>
+                                        <Link to={`/perfil/${id}`} className='flex items-center gap-3'>
                                             <FontAwesomeIcon icon={faUser} />
                                             Perfil
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem>
-                                        <Link className='flex items-center gap-3'>
+                                        <Link className='flex items-center gap-3' onClick={handleLogout}>
                                             <FontAwesomeIcon icon={faSignOut} />
                                             Sair
                                         </Link>
@@ -94,8 +100,9 @@ export default function Header() {
                         )}
 
                         <div onClick={() => setOpen(!open)}>
-                            <FontAwesomeIcon icon={faBars} className='text-xl cursor-pointer md:hidden' />
+                            <FontAwesomeIcon icon={faBars} className='text-xl cursor-pointer md:hidden ' />
                         </div>
+                        
                     </div>
                 </nav>
 
