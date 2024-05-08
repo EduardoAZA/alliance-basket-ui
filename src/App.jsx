@@ -1,12 +1,13 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Header from './components/Header'
+import Home from "./routes/home";
+import Login from "./routes/login";
+import Signup from "./routes/signup";
+import Profile from "./routes/profile";
 
-export function App() {
+export default function App() {
   return (
     <>
-     <p>duca</p>
+      <Home/>
     </>
   )
 }
