@@ -37,10 +37,11 @@ export default function Header() {
 
     const { id } = useParams();
 
+    
+
     return (
         <>
             <header className='sticky top-0 w-full bg-white z-100 p-3 shadow-md'>
-
                 <nav className='h-14 flex justify-between items-center pl-4 pr-4 md:px-10'>
                     {id ? (
                         <Link to={`/home/${id}`} className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
@@ -70,7 +71,6 @@ export default function Header() {
 
 
                     </div>
-
                     <div className=' flex items-center gap-4 pl-10 '>
                         {isLoggedIn ? (
                             <DropdownMenu>

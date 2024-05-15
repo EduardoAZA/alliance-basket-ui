@@ -17,7 +17,7 @@ export default function Signup() {
     password: ''
   })
 
-  const {id} = useParams();
+  const { id } = useParams();
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -57,9 +57,28 @@ export default function Signup() {
       return;
     }
 
+    // Verificação de caracteres
+    if (details.password.length < 8) {
+      toast.error("Sua senha deve conter ao menos 8 caracteres ")
+      return;
+    }
+
+    // Verificação de letra maiscula
+    if (!/[A-Z]/.test(details.password)) {
+      toast.error("Sua senha deve conter uma letra minúscula");
+      return;
+    }
+
+    //Verificação de caracter especial
+    if (!/[^a-zA-Z0-9]/.test(details.password)) {
+      toast.error("Sua senha deve conter pelo menos um caractere especial");
+      return;
+    }
+
+
+
+
     createUser(details);
-
-
   }
 
 

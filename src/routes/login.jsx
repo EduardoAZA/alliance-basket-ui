@@ -70,11 +70,11 @@ export default function Login() {
     <>
       <div className="absolute top-6 left-6 max-[600px]:left-1/2 max-[600px]:-translate-x-1/2">
          {id ? (
-          <Link to={`/home/${id}`} className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
+          <Link to={`/home/${id}`} className='font-bold text-3xl text-white hover:text-primary-light transition-all duration-300'> AllianceBasket</Link>
         ) : (
-          <Link to="/home" className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
+          <Link to="/home" className='font-bold text-3xl text-white hover:text-gray-400 transition-all duration-300'> AllianceBasket</Link>
         )}</div>
-      <div className='w-full h-screen flex justify-center items-center bg-gradient-to-b from-primary-dark via-primary to-white  '>
+      <div className='w-full h-screen flex justify-center items-center bg-gradient-to-b from-dark via-primary-dark to-primary  '>
         <div className="py-16 px-12 text-center shadow-normal rounded-lg bg-white max-[600px]:w-full max-[600px]:flex max-[600px]:flex-col max-[600px]:items-center  ">
           <h1 className="text-[40px] mb-14 text-primary relative font-bold after:content-[''] after:w-10 after:h-1 after:rounded-sm after:bg-primary after:absolute after:bottom-[-12px] after:left-1/2 after:translate-x-[-50%] max-[600px]:text-3xl">Login</h1>
           <form className="w-96 h-72 max-[450px]:w-80" onSubmit={handleSubmit}>
