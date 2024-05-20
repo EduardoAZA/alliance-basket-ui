@@ -1,4 +1,4 @@
-import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faLock, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@/components/ui/button"
 import { useState } from "react";
@@ -12,11 +12,11 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const navigate = useNavigate();
 
-  const {id} = useParams();
+  const { id } = useParams();
 
-  const [fields, setFields] = useState({ 
-    email: '', 
-    password: '' 
+  const [fields, setFields] = useState({
+    email: '',
+    password: ''
   });
 
   const handleChange = (event) => {
@@ -31,13 +31,13 @@ export default function Login() {
       toast.error("Por favor, preencha todos os campos.");
       return;
     }
-  
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(fields.email)) {
       toast.error("Por favor, insira um email válido.");
       return;
     }
-  
+
     verifyUser();
   }
 
@@ -46,15 +46,15 @@ export default function Login() {
       .then((response) => {
         localStorage.setItem('token', response.data.token);
 
-        const id = response.data.user.id 
-  
+        const id = response.data.user.id
+
         return navigate(`/home/${id}`)
       })
-      .catch((error) => { 
-        console.log(error.response.data); 
+      .catch((error) => {
+        console.log(error.response.data);
         error = error.response.data.name
 
-        switch(error){
+        switch (error) {
           case "InvalidFieldException":
             toast.error("Senha inválida");
             break;
@@ -65,16 +65,22 @@ export default function Login() {
       });
   }
 
+  //Senha oculta por padrão
+  const [showPassword, setShowPassword] = useState(false);
+  //Invertendo o valor do ShowPassword
+  function handleTogglePasswordVisibility() {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <>
       <div className="absolute top-6 left-6 max-[600px]:left-1/2 max-[600px]:-translate-x-1/2">
-         {id ? (
-          <Link to={`/home/${id}`} className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
+        {id ? (
+          <Link to={`/home/${id}`} className='font-bold text-3xl text-white hover:text-primary-light transition-all duration-300'> AllianceBasket</Link>
         ) : (
-          <Link to="/home" className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
+          <Link to="/home" className='font-bold text-3xl text-white hover:text-gray-400 transition-all duration-300'> AllianceBasket</Link>
         )}</div>
-      <div className='w-full h-screen flex justify-center items-center bg-gradient-to-b from-primary-dark via-primary to-white  '>
+      <div className='w-full h-screen flex justify-center items-center bg-gradient-to-b from-dark via-primary-dark to-primary  '>
         <div className="py-16 px-12 text-center shadow-normal rounded-lg bg-white max-[600px]:w-full max-[600px]:flex max-[600px]:flex-col max-[600px]:items-center  ">
           <h1 className="text-[40px] mb-14 text-primary relative font-bold after:content-[''] after:w-10 after:h-1 after:rounded-sm after:bg-primary after:absolute after:bottom-[-12px] after:left-1/2 after:translate-x-[-50%] max-[600px]:text-3xl">Login</h1>
           <form className="w-96 h-72 max-[450px]:w-80" onSubmit={handleSubmit}>
@@ -89,15 +95,22 @@ export default function Login() {
                   onChange={handleChange}
                 />
               </div>
-              <div className="flex items-center border-b border-solid border-silver">
+              <div className="flex items-center border-b border-solid border-silver relative">
                 <FontAwesomeIcon icon={faLock} className="text-dark" />
-                <input
-                  type="password"
-                  className="border-none outline-none px-4 py-3 text-dark text-lg"
-                  placeholder="Senha"
-                  name="password"
-                  onChange={handleChange}
-                />
+                <div>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    className="border-none outline-none px-4 py-3 text-dark text-lg"
+                    placeholder="Senha"
+                    name="password"
+                    onChange={handleChange}
+                  />
+                  {showPassword ? (
+                    <FontAwesomeIcon icon={faEyeSlash} className="absolute top-3 right-2 cursor-pointer" onClick={handleTogglePasswordVisibility} />
+                  ) : (
+                    <FontAwesomeIcon icon={faEye} className="absolute top-3 right-2 cursor-pointer" onClick={handleTogglePasswordVisibility} />
+                  )}
+                </div>
               </div>
             </div>
             <p className="text-left text-lg font-semibold pt-3"><Link to="/" href="" className="text-primary cursor-pointer hover:text-meteorite-dark transition-all duration-300">Esqueceu a senha?</Link></p>

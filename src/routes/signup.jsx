@@ -1,7 +1,7 @@
 import { faEnvelope, faLock, faUser, faUserAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Toaster, toast } from 'sonner'
-
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { Link, createHashRouter } from "react-router-dom";
 import axios from "axios";
@@ -17,7 +17,7 @@ export default function Signup() {
     password: ''
   })
 
-  const {id} = useParams();
+  const { id } = useParams();
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -57,10 +57,40 @@ export default function Signup() {
       return;
     }
 
+    // Verificação de caracteres
+    if (details.password.length < 8) {
+      toast.error("Sua senha deve conter ao menos 8 caracteres ")
+      return;
+    }
+
+    // Verificação de letra maiscula
+    if (!/[A-Z]/.test(details.password)) {
+      toast.error("Sua senha deve conter uma letra minúscula");
+      return;
+    }
+
+    //Verificação de caracter especial
+    if (!/[^a-zA-Z0-9]/.test(details.password)) {
+      toast.error("Sua senha deve conter pelo menos um caractere especial");
+      return;
+    }
+
+    if (!/[0-9]/.test(details.password)){
+      toast.error("Sua senha deve conter ao menos um número")
+      return;
+    }
     createUser(details);
-
-
   }
+
+  //Senha oculta por padrão
+  const [showPassword, setShowPassword] = useState(false);
+  //Invertendo o valor do ShowPassword
+  function handleTogglePasswordVisibility(fieldName) {
+    setShowPassword((prevState) => ({
+      ...prevState,
+      [fieldName]: !prevState[fieldName]
+    }));
+  };
 
 
   return (
@@ -108,25 +138,39 @@ export default function Signup() {
                   />
                 </div>
 
-                <div className="w-full my-4 flex items-center border-b border-solid border-silver">
+                <div className="w-full my-4 flex items-center border-b border-solid border-silver relative">
                   <FontAwesomeIcon icon={faLock} className="text-dark" />
-                  <input
-                    type="password"
-                    placeholder="Senha"
-                    className="w-full bg-transparent border-none outline-none px-4 py-3 text-lg"
-                    name="password"
-                    onChange={handleChange}
-                  />
+                  <div>
+                    <input
+                      type={showPassword.password ? "text" : "password"}
+                      placeholder="Senha"
+                      className="w-full bg-transparent border-none outline-none px-4 py-3 text-lg"
+                      name="password"
+                      onChange={handleChange}
+                    />
+                    {showPassword.password ? (
+                      <FontAwesomeIcon icon={faEyeSlash} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('password')} />
+                    ) : (
+                      <FontAwesomeIcon icon={faEye} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('password')} />
+                    )}
+                  </div>
                 </div>
-                <div className="w-full my-4 flex items-center border-b border-solid border-silver">
+                <div className="w-full my-4 flex items-center border-b border-solid border-silver relative">
                   <FontAwesomeIcon icon={faLock} className="text-dark" />
-                  <input
-                    type="password"
-                    placeholder="Confirmar Senha"
-                    className="w-full bg-transparent border-none outline-none px-4 py-3 text-lg"
-                    name="confirmPassword"
-                    onChange={handleChange}
-                  />
+                  <div>
+                    <input
+                      type={showPassword.confirmPassword ? "text" : "password"}
+                      placeholder="Confirmar Senha"
+                      className="w-full bg-transparent border-none outline-none px-4 py-3 text-lg"
+                      name="confirmPassword"
+                      onChange={handleChange}
+                    />
+                    {showPassword.confirmPassword ? (
+                      <FontAwesomeIcon icon={faEyeSlash} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('confirmPassword')} />
+                    ) : (
+                      <FontAwesomeIcon icon={faEye} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('confirmPassword')} />
+                    )}
+                  </div>
                 </div>
               </div>
               <button className="w-3/5 text-lg font-medium p-3 rounded-md outline-none border-none bg-primary text-white hover:bg-meteorite-dark transition-all duration-300 mt-[7%]" type="submit">Cadastrar</button>

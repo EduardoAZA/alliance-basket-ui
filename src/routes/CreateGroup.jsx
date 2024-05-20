@@ -51,7 +51,7 @@ export default function CreateGroup() {
     if (nome.trim() !== '') {
       setParticipantes([...participantes, nome]);
       // Limpando o campo
-      setNome(''); 
+      setNome('');
     }
   };
 
@@ -98,17 +98,17 @@ export default function CreateGroup() {
                         <label htmlFor="" className="text-dark ">Nome do grupo</label>
                         <input
                           type="text"
-                          className="border border-dark"
+                          className="border border-grey-5800 pl-2"
                           name="title"
                         />
                       </DialogDescription>
                       <DialogDescription className="flex flex-col text-xl ">
                         <label htmlFor="" className="text-dark ">Descrição</label>
-                        <textarea name="" id="" className="border resize-none h-40 p-2 border-dark"></textarea>
+                        <textarea name="" id="" className="border resize-none h-40 p-2 border-grey-5800"></textarea>
                       </DialogDescription>
                       <DialogDescription className="flex flex-col text-xl ">
                         <Select>
-                          <SelectTrigger className="border border-dark">
+                          <SelectTrigger className="border border-grey-5800">
                             <SelectValue placeholder="Tipo do grupo" className="text-2xl " />
                           </SelectTrigger>
                           <SelectContent >
@@ -140,7 +140,7 @@ export default function CreateGroup() {
                         <div className="flex gap-5">
                           <input
                             type="text"
-                            className="border-b border-dark mt-3 w-4/5 pl-2"
+                            className="border-b border-grey-5800 mt-3 w-4/5 pl-2"
                             placeholder="Nome"
                             value={nome}
                             onChange={handleChangeNome}
@@ -153,22 +153,25 @@ export default function CreateGroup() {
                             Adicionar
                           </button>
                         </div>
-                        {participantes.map((participante, index) => (
-                          <div key={index} className="flex justify-between pt-5">
-                            <div>{participante}</div>
-                            <button
-                              type="button"
-                              onClick={() => removeInvite(index)}
-                              className="text-2xl"
-                            >
-                              <FontAwesomeIcon icon={faClose} className="text-red-500 font-black hover:text-red-700" />
-                            </button>
-                          </div>
-                        ))}
+                        <div style={{ maxHeight: '150px', overflowY: 'auto' }}>
+                          {participantes.map((participante, index) => (
+                            <div key={index} className="flex justify-between pt-5">
+                              <div>{participante}</div>
+                              <button
+                                type="button"
+                                onClick={() => removeInvite(index)}
+                                className="text-2xl"
+                              >
+                                <FontAwesomeIcon icon={faClose} className="text-red-500 font-black hover:text-red-700" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+
                       </DialogDescription>
 
                       <div className="flex items-center justify-center pt-10">
-                        <Button type="submit" className="py-6 w-2/5 text-white">Criar</Button>
+                        <Button type="submit" className="py-6 w-2/5 text-white text-lg">Criar</Button>
                       </div>
 
                     </DialogHeader>
