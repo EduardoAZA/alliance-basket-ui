@@ -1,7 +1,10 @@
+import Aos from "aos";
+import 'aos/dist/aos.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faCheck, faClose, fa1, fa2, fa3, fa4, fa5, fa6  } from "@fortawesome/free-solid-svg-icons"
+import { useState, useEffect } from "react"
 import Header from "../components/Header"
 import StepNumber from "../components/StepNumber"
-import { faCheck, faClose } from "@fortawesome/free-solid-svg-icons"
 import {
   Dialog,
   DialogContent,
@@ -17,12 +20,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { fa1, fa2, fa3, fa4, fa5, fa6 } from "@fortawesome/free-solid-svg-icons"
-import { useState } from "react"
+
 
 export default function CreateGroup() {
+
+  //Initializate AOS
+  useEffect(() => {
+    Aos.init();
+  }, [])
+
+  const [nome, setNome] = useState('');
+  
+  const [participantes, setParticipantes] = useState([]);
 
   const [groupConfigs, setGroupConfigs] = useState({
     title: '',
@@ -39,9 +49,6 @@ export default function CreateGroup() {
       return { ...prev, [name]: value }
     })
   }
-
-  const [nome, setNome] = useState('');
-  const [participantes, setParticipantes] = useState([]);
 
   const handleChangeNome = (e) => {
     setNome(e.target.value);
@@ -65,8 +72,8 @@ export default function CreateGroup() {
     <div className="h-screen flex flex-col">
       <Header />
       <div className="bg-white   flex-grow overflow-y-auto flex flex-col items-center justify-center">
-        <div className="max-w-[1600px]">
-          <h1 className="font-bold text-6xl text-meteorite-dark relative text-center">Criando seu <span className="text-primary-dark">grupo</span></h1>
+        <div data-aos="fade-left" data-aos-duration="600" className="max-w-[1600px]">
+          <h1 className="font-bold text-6xl text-dark relative text-center">Criando seu <span className="text-primary-dark">grupo</span></h1>
           <p className="mt-4 text-2xl text-center text-meteorite-dark">Nossa plataforma permite que você crie grupos personalizados de forma simples e intuitiva. Siga os passos abaixo para criar o seu grupo:</p>
           <div className="py-10 grid grid-cols-3 gap-9">
 
@@ -171,7 +178,7 @@ export default function CreateGroup() {
                       </DialogDescription>
 
                       <div className="flex items-center justify-center pt-10">
-                        <Button type="submit" className="py-6 w-2/5 text-white text-lg">Criar</Button>
+                        <button type="submit" className="py-6 w-2/5 text-white text-lg">Criar</button>
                       </div>
 
                     </DialogHeader>

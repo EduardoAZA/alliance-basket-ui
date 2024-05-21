@@ -1,15 +1,20 @@
-import { faEnvelope, faLock, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "@/components/ui/button"
-import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { toast } from "sonner";
+import Aos from "aos";
+import 'aos/dist/aos.css';
 import axios from "axios";
 import api from "@/services/api";
-import { useNavigate } from "react-router-dom";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope, faLock, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from "react";
+import { Link, useParams, useNavigate} from "react-router-dom";
+import { toast } from "sonner";
 
 export default function Login() {
+
+  //Initializate AOS
+  useEffect(() => {
+    Aos.init();
+  }, [])
+
   const navigate = useNavigate();
 
   const { id } = useParams();
@@ -74,14 +79,14 @@ export default function Login() {
 
   return (
     <>
-      <div className="absolute top-6 left-6 max-[600px]:left-1/2 max-[600px]:-translate-x-1/2">
+      <div data-aos="zoom-in" data-aos-duration="600" className="absolute top-6 left-6 max-[600px]:left-1/2 max-[600px]:-translate-x-1/2">
         {id ? (
           <Link to={`/home/${id}`} className='font-bold text-3xl text-white hover:text-primary-light transition-all duration-300'> AllianceBasket</Link>
         ) : (
           <Link to="/home" className='font-bold text-3xl text-white hover:text-gray-400 transition-all duration-300'> AllianceBasket</Link>
         )}</div>
       <div className='w-full h-screen flex justify-center items-center bg-gradient-to-b from-dark via-primary-dark to-primary  '>
-        <div className="py-16 px-12 text-center shadow-normal rounded-lg bg-white max-[600px]:w-full max-[600px]:flex max-[600px]:flex-col max-[600px]:items-center  ">
+        <div data-aos="zoom-in" data-aos-duration="600" className="py-16 px-12 text-center shadow-normal rounded-lg bg-white max-[600px]:w-full max-[600px]:flex max-[600px]:flex-col max-[600px]:items-center  ">
           <h1 className="text-[40px] mb-14 text-primary relative font-bold after:content-[''] after:w-10 after:h-1 after:rounded-sm after:bg-primary after:absolute after:bottom-[-12px] after:left-1/2 after:translate-x-[-50%] max-[600px]:text-3xl">Login</h1>
           <form className="w-96 h-72 max-[450px]:w-80" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-5">
@@ -89,7 +94,7 @@ export default function Login() {
                 <FontAwesomeIcon icon={faEnvelope} className="text-dark" />
                 <input
                   type="text"
-                  className="border-none outline-none px-4 py-3 text-dark text-lg focus:text-primary-dark "
+                  className="w-full border-none outline-none px-4 py-3 text-dark text-lg focus:text-primary-dark "
                   placeholder="Email"
                   name="email"
                   onChange={handleChange}
@@ -97,18 +102,18 @@ export default function Login() {
               </div>
               <div className="flex items-center border-b border-solid border-silver relative">
                 <FontAwesomeIcon icon={faLock} className="text-dark" />
-                <div>
+                <div className="w-[90%]">
                   <input
                     type={showPassword ? 'text' : 'password'}
-                    className="border-none outline-none px-4 py-3 text-dark text-lg"
+                    className="w-full border-none outline-none px-4 py-3 text-dark text-lg"
                     placeholder="Senha"
                     name="password"
                     onChange={handleChange}
                   />
                   {showPassword ? (
-                    <FontAwesomeIcon icon={faEyeSlash} className="absolute top-3 right-2 cursor-pointer" onClick={handleTogglePasswordVisibility} />
+                    <FontAwesomeIcon icon={faEyeSlash} className="absolute top-4 right-2 cursor-pointer" onClick={handleTogglePasswordVisibility} />
                   ) : (
-                    <FontAwesomeIcon icon={faEye} className="absolute top-3 right-2 cursor-pointer" onClick={handleTogglePasswordVisibility} />
+                    <FontAwesomeIcon icon={faEye} className="absolute top-4 right-2 cursor-pointer" onClick={handleTogglePasswordVisibility} />
                   )}
                 </div>
               </div>
