@@ -1,14 +1,20 @@
-import { faEnvelope, faLock, faUser, faUserAlt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Toaster, toast } from 'sonner'
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
-import { Link, createHashRouter } from "react-router-dom";
+import Aos from "aos";
+import 'aos/dist/aos.css';
 import axios from "axios";
 import api from "@/services/api";
-import { useParams, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope, faLock, faUser, faUserAlt, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { Toaster, toast } from 'sonner'
+import { useState,useEffect } from "react";
+import { Link, createHashRouter, useParams, useNavigate  } from "react-router-dom";
 
 export default function Signup() {
+
+  //Initializate AOS
+  useEffect(() => {
+    Aos.init();
+  }, [])
+
   const navigate = useNavigate();
 
   const [details, setDetails] = useState({
@@ -75,7 +81,7 @@ export default function Signup() {
       return;
     }
 
-    if (!/[0-9]/.test(details.password)){
+    if (!/[0-9]/.test(details.password)) {
       toast.error("Sua senha deve conter ao menos um número")
       return;
     }
@@ -95,11 +101,11 @@ export default function Signup() {
 
   return (
     <>
-      <div className="absolute top-6 left-6">
+      <div data-aos="zoom-in" data-aos-duration="600" className="absolute top-6 left-6">
         <Link to="/home" className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
       </div>
       <div className="w-full h-screen flex items-center justify-center bg-gradient-to-b from-white via-primary-light to-primary ">
-        <div className="w-3/5 h-3/5  flex bg-white rounded-3xl shadow-md" >
+        <div data-aos="zoom-in" data-aos-duration="600"  className="w-3/5 h-3/5  flex bg-white rounded-3xl shadow-md" >
           <div className="w-1/2 h-full flex flex-col justify-center items-center bg-primary rounded-tl-3xl rounded-bl-3xl rounded-tr-[60px] rounded-br-[60px]">
             <h1 className="text-white text-3xl font-bold">Seja bem-vindo</h1>
 
@@ -140,7 +146,7 @@ export default function Signup() {
 
                 <div className="w-full my-4 flex items-center border-b border-solid border-silver relative">
                   <FontAwesomeIcon icon={faLock} className="text-dark" />
-                  <div>
+                  <div className="w-[90%]">
                     <input
                       type={showPassword.password ? "text" : "password"}
                       placeholder="Senha"
@@ -157,7 +163,7 @@ export default function Signup() {
                 </div>
                 <div className="w-full my-4 flex items-center border-b border-solid border-silver relative">
                   <FontAwesomeIcon icon={faLock} className="text-dark" />
-                  <div>
+                  <div className="w-[90%]">
                     <input
                       type={showPassword.confirmPassword ? "text" : "password"}
                       placeholder="Confirmar Senha"
