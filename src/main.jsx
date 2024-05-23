@@ -16,7 +16,11 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
-    path: "/home/:id?",
+    path: "/login",
+    element: <Login />
+  },
+  {
+    path: "/home/:id",
     element: <Home />
   },
   {
@@ -24,15 +28,11 @@ const router = createBrowserRouter([
     element: <Profile />
   },
   {
-    path: "/login",
-    element: <Login />
-  },
-  {
     path: "/cadastro",
     element: <Signup />
   },
   {
-    path: "/criar-grupo",
+    path: "/criar-grupo/:id",
     element: <CreateGroup />
   },
   {
@@ -45,8 +45,14 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <ErrorPage />
+  },
+  // Rota para usuários deslogados
+  {
+    path: "/home",
+    element: <Home />
   }
 ])
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

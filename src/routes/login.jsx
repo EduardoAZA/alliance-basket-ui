@@ -26,7 +26,9 @@ export default function Login() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFields(prev => ({ ...prev, [name]: value }));
+    setFields( prev => (
+      { ...prev, [name]: value }
+    ));
   }
 
   const handleSubmit = (event) => {
@@ -50,9 +52,7 @@ export default function Login() {
     api.post('/clients/login', fields)
       .then((response) => {
         localStorage.setItem('token', response.data.token);
-
         const id = response.data.user.id
-
         return navigate(`/home/${id}`)
       })
       .catch((error) => {
