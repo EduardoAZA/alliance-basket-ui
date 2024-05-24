@@ -71,7 +71,7 @@ export default function CreateGroup() {
   return (
     <div className="h-screen flex flex-col">
       <Header />
-      <div className="bg-white   flex-grow overflow-y-auto flex flex-col items-center justify-center">
+      <div className="bg-white flex-grow overflow-y-auto flex flex-col items-center justify-center">
         <div data-aos="fade-left" data-aos-duration="600" className="max-w-[1600px]">
           <h1 className="font-bold text-6xl text-dark relative text-center">Criando seu <span className="text-primary-dark">grupo</span></h1>
           <p className="mt-4 text-2xl text-center text-meteorite-dark">Nossa plataforma permite que você crie grupos personalizados de forma simples e intuitiva. Siga os passos abaixo para criar o seu grupo:</p>
