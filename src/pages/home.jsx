@@ -6,17 +6,17 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons"
 import { useEffect } from "react";
 
 export default function Home() {
-  
+
   //Initializate AOS
-  useEffect( () => {
+  useEffect(() => {
     Aos.init();
   }, [])
-  
+
   return (
     <div className='m-0 p-0 box-border h-100 flex flex-col'>
-      <Header/>
+      <Header />
       <div className='flex-grow: 1;overflow-y:auto; h-[90vh] flex justify-center items-center'>
-        <div data-aos="flip-up" data-aos-duration="600"  className="w-[80%] h-[80%] rounded-2xl flex" >
+        <div data-aos="flip-up" data-aos-duration="600" className="w-[80%] h-[80%] rounded-2xl flex" >
           <div className="w-[50%] flex flex-col justify-center items-center">
             <h1 className="text-6xl pb-3 text-dark font-bold">Sua plataforma inovadora de <span className="text-primary">controle de gastos</span></h1>
             <p className="text-justify text-lg text-dark ">
@@ -24,15 +24,16 @@ export default function Home() {
             </p>
 
             <div className="w-full flex gap-6 text-xl mt-4">
-              <p className="flex items-center gap-2 text-lg text-meteorite-dark"><FontAwesomeIcon icon={faCheck}/> Visão Geral das Finanças</p>
-              <p className="flex items-center gap-2 text-lg text-meteorite-dark"><FontAwesomeIcon icon={faCheck}/>Organização Financeira em Grupo</p>
-              <p className="flex items-center gap-2 text-lg text-meteorite-dark"><FontAwesomeIcon icon={faCheck}/> Plataforma intuitiva</p>
+              <p className="flex items-center gap-2 text-lg text-meteorite-dark"><FontAwesomeIcon icon={faCheck} />Organização Financeira em Grupo</p>
+              <p className="flex items-center gap-2 text-lg text-meteorite-dark"><FontAwesomeIcon icon={faCheck} /> Plataforma intuitiva</p>
+              <p className="flex items-center gap-2 text-lg text-meteorite-dark"><FontAwesomeIcon icon={faCheck} /> Visão Geral das Finanças</p>
+              
             </div>
 
 
           </div>
           <div className="w-[50%] flex justify-center items-center">
-              <img src="https://hubify.com.br/wp-content/uploads/2017/04/criar-um-site.jpg" alt="Imagem representativa do site"  className="w-[70%] h-[70%]"/>
+            <img src="https://hubify.com.br/wp-content/uploads/2017/04/criar-um-site.jpg" alt="Imagem representativa do site" className="w-[70%] h-[70%]" />
           </div>
         </div>
       </div>
