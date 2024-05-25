@@ -22,11 +22,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useParams } from "react-router-dom";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 
 export default function CreateGroup() {
-
+  const { id } = useParams();
   //Initializate AOS
   useEffect(() => {
     Aos.init();

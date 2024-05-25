@@ -12,8 +12,6 @@ import ErrorPage from "./pages/ErrorPage";
 import CreateGroup from "./pages/CreateGroup";
 import MyGroups from "./pages/MyGroups";
 
-
-
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App/>
