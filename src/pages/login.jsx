@@ -53,7 +53,7 @@ export default function Login() {
 
         const id = response.data.user.id
 
-        return navigate(`/home/${id}`)
+        return navigate(`/${id}`)
       })
       .catch((error) => {
         console.log(error.response.data);

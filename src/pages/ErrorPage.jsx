@@ -9,9 +9,9 @@ export default function ErrorPage() {
     <>
       <div className="absolute top-6 left-6 max-[600px]:left-1/2 max-[600px]:-translate-x-1/2">
         {id ? (
-          <Link to={`/home/${id}`} className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
+          <Link to={`/${id}`} className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
         ) : (
-          <Link to="/home" className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
+          <Link to="/" className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
         )}</div>
       <div className='w-full h-screen flex justify-center items-center bg-white '>
         <div className="flex flex-col items-center justify-evenly py-12 px-8 h-[30rem] max-w-[40rem] text-center shadow-mild rounded-lg bg-primary max-[600px]:w-full max-[600px]:flex max-[600px]:flex-col max-[600px]:items-center  ">
