@@ -10,6 +10,7 @@ import Login from "./routes/login";
 import Signup from "./routes/signup";
 import ErrorPage from "./routes/ErrorPage";
 import CreateGroup from "./routes/CreateGroup";
+import MyGroups from "./routes/MyGroups";
 
 // 1 - Router configuration
 import { createBrowserRouter, RouterProvider } from "react-router-dom";

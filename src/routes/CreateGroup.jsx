@@ -1,8 +1,9 @@
 import Aos from "aos";
 import 'aos/dist/aos.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCheck, faClose, fa1, fa2, fa3, fa4, fa5, fa6  } from "@fortawesome/free-solid-svg-icons"
+import { faCheck, faClose, fa1, fa2, fa3, fa4, fa5, fa6 } from "@fortawesome/free-solid-svg-icons"
 import { useState, useEffect } from "react"
+import { useForm } from "react-hook-form";
 import Header from "../components/Header"
 import StepNumber from "../components/StepNumber"
 import {
@@ -12,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter
 } from "@/components/ui/dialog"
 import {
   Select,
@@ -31,48 +33,14 @@ export default function CreateGroup() {
     Aos.init();
   }, [])
 
-  const [nome, setNome] = useState('');
-  
-  const [participantes, setParticipantes] = useState([]);
-
-  const [groupConfigs, setGroupConfigs] = useState({
-    title: '',
-    description: '',
-    groupType: '',
-    expenseCreator: '',
-    invites: []
-  })
-
-  const handleChange = (event) => {
-    const { name, value } = event.target
-
-    setDetails((prev) => {
-      return { ...prev, [name]: value }
-    })
-  }
-
-  const handleChangeNome = (e) => {
-    setNome(e.target.value);
-  };
-
-  const addInvite = (event) => {
-    if (nome.trim() !== '') {
-      setParticipantes([...participantes, nome]);
-      // Limpando o campo
-      setNome('');
-    }
-  };
-
-  const removeInvite = (index) => {
-    const newParticipantes = [...participantes];
-    newParticipantes.splice(index, 1);
-    setParticipantes(newParticipantes);
-  };
+  const { register, handleSubmit } = useForm();
+  const [data, setData] = useState("");
+  const onSubmit = data => console.log(data);
 
   return (
     <div className="h-screen flex flex-col">
       <Header />
-      <div className="bg-white   flex-grow overflow-y-auto flex flex-col items-center justify-center">
+      <div className="bg-white flex-grow overflow-y-auto flex flex-col items-center justify-center">
         <div data-aos="fade-left" data-aos-duration="600" className="max-w-[1600px]">
           <h1 className="font-bold text-6xl text-dark relative text-center">Criando seu <span className="text-primary-dark">grupo</span></h1>
           <p className="mt-4 text-2xl text-center text-meteorite-dark">Nossa plataforma permite que você crie grupos personalizados de forma simples e intuitiva. Siga os passos abaixo para criar o seu grupo:</p>
@@ -98,39 +66,33 @@ export default function CreateGroup() {
               <Dialog>
                 <DialogTrigger className="bg-success-dark py-4 px-8 text-xl font-bold text-white rounded-xl">Criar grupo</DialogTrigger>
                 <DialogContent>
-                  <form action="">
+                  <form onSubmit={handleSubmit(onSubmit)}>
                     <DialogHeader className="flex flex-col gap-5">
 
                       <DialogTitle className="text-3xl text-center font-bold">Criar grupo</DialogTitle>
                       <DialogDescription className="flex flex-col text-xl ">
                         <label htmlFor="" className="text-dark ">Nome do grupo</label>
                         <input
-                          type="text"
+                          {...register("name", { required: true })}
                           className="border border-grey-5800 pl-2"
-                          name="title"
                         />
                       </DialogDescription>
                       <DialogDescription className="flex flex-col text-xl ">
                         <label htmlFor="" className="text-dark ">Descrição</label>
-                        <textarea name="" id="" className="border resize-none h-40 p-2 border-grey-5800"></textarea>
+                        <textarea  {...register("description")} className="border resize-none h-40 p-2 border-grey-5800"></textarea>
                       </DialogDescription>
                       <DialogDescription className="flex flex-col text-xl ">
-                        <Select>
-                          <SelectTrigger className="border border-grey-5800">
-                            <SelectValue placeholder="Tipo do grupo" className="text-2xl " />
-                          </SelectTrigger>
-                          <SelectContent >
-                            <SelectItem value="viagem" >Viagem</SelectItem>
-                            <SelectItem value="familia">Família</SelectItem>
-                            <SelectItem value="org1">Organização</SelectItem>
-                            <SelectItem value="org2">Organização</SelectItem>
-                            <SelectItem value="org3">Organização</SelectItem>
-                            <SelectItem value="org4">Organização</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <select {...register("type", { required: true })}>
+                          <option value="">Select...</option>
+                          <option value="Trabalho">Trabalho</option>
+                          <option value="Viagem">Viagem</option>
+                          <option value="Casa">Casa</option>
+                          <option value="Evento">Evento</option>
+                          <option value="Grupo">Grupo</option>
+                        </select>
                       </DialogDescription>
                       <DialogDescription className="pl-4 flex flex-col text-xl ">
-                        <RadioGroup defaultValue="option-one">
+                        {/* <RadioGroup defaultValue="option-one">
                           <div className="flex items-center space-x-2">
                             <RadioGroupItem className="size-4" value="option-one" id="option-one" />
                             <label htmlFor="option-one" className="text-dark">Apenas o administrador criar despesa</label>
@@ -139,47 +101,35 @@ export default function CreateGroup() {
                             <RadioGroupItem value="option-two" id="option-two" />
                             <label htmlFor="option-two" className="text-dark">Todos criarem despesas</label>
                           </div>
-                        </RadioGroup>
+                        </RadioGroup> */}
+                        <div className="flex flex-col">
+                          <label htmlFor="field-rain" className="flex gap-2">
+                            <input
+                              {...register("allow_edit")}
+                              type="radio"
+                              value="0"
+                              id="field-rain"
+                            />
+                            Apenas o admnistrador pode criar despesas
+                          </label>
+                          <label htmlFor="field-rain" className="flex gap-2">
+                            <input
+                              {...register("allow_edit")}
+                              type="radio"
+                              value="1"
+                              id="field-rain"
+                            />
+                            Todos os usuários podem criar despesas
+                          </label>
+                        </div>
+                        
 
                       </DialogDescription>
 
-                      <DialogDescription className="flex flex-col text-xl ">
-                        <label htmlFor="" className="text-dark ">Adicionar participante</label>
-                        <div className="flex gap-5">
-                          <input
-                            type="text"
-                            className="border-b border-grey-5800 mt-3 w-4/5 pl-2"
-                            placeholder="Nome"
-                            value={nome}
-                            onChange={handleChangeNome}
-                          />
-                          <button
-                            type="button"
-                            onClick={addInvite}
-                            className="border border-primary pl-4 pr-4 rounded-md text-primary hover:bg-primary hover:text-white"
-                          >
-                            Adicionar
-                          </button>
-                        </div>
-                        <div style={{ maxHeight: '150px', overflowY: 'auto' }}>
-                          {participantes.map((participante, index) => (
-                            <div key={index} className="flex justify-between pt-5">
-                              <div>{participante}</div>
-                              <button
-                                type="button"
-                                onClick={() => removeInvite(index)}
-                                className="text-2xl"
-                              >
-                                <FontAwesomeIcon icon={faClose} className="text-red-500 font-black hover:text-red-700" />
-                              </button>
-                            </div>
-                          ))}
-                        </div>
 
-                      </DialogDescription>
 
-                      <div className="flex items-center justify-center pt-10">
-                        <button type="submit" className="py-6 w-2/5 text-white text-lg">Criar</button>
+                      <div className="flex items-center justify-center pt-2">
+                        <input type="submit" className="bg-primary py-3 w-1/5 text-white rounded-md" placeholder="submit" />
                       </div>
 
                     </DialogHeader>

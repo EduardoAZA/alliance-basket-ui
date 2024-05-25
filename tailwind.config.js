@@ -60,7 +60,9 @@ module.exports = {
           meteorite: "#8c85ff",
           dark: "#2f1c6a",  
         },
-        dark: "#1d1e20", 
+        dark: {
+          primary:"#1d1e20"
+        },
         danger: {
           DEFAULT: "#fc5185",
           dark: "#d63163", 
