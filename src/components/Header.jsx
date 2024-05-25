@@ -32,7 +32,7 @@ export default function Header() {
     function handleLogout() {
         localStorage.removeItem('token');
         setIsLoggedIn(false);
-        window.location.href = '/home';
+        return navigate('/login') 
     }
 
     const { id } = useParams();
@@ -44,9 +44,9 @@ export default function Header() {
             <header className='sticky top-0 w-full bg-white z-100 p-3 shadow-md'>
                 <nav className='h-14 flex justify-between items-center pl-4 pr-4 md:px-10'>
                     {id ? (
-                        <Link to={`/home/${id}`} className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
+                        <Link to={`/${id}`} className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
                     ) : (
-                        <Link to="/home" className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
+                        <Link to="/" className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
                     )}
                     <div className='ml-auto flex '>
                         <ul className={`md:flex md:items-center md:pb-0 pb-12 absolute gap-5 md:static bg-white md:z-50 z-50 top-[78px] border-t md:border-t-0 pt-8 md:pt-0 left-0 w-full md:w-auto md:pl-0 pl-9 transition-all ease-in ${open ? '' : 'hidden'}`}>

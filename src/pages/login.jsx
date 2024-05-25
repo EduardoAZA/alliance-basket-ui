@@ -53,7 +53,8 @@ export default function Login() {
       .then((response) => {
         localStorage.setItem('token', response.data.token);
         const id = response.data.user.id
-        return navigate(`/home/${id}`)
+
+        return navigate(`/${id}`)
       })
       .catch((error) => {
         console.log(error.response.data);

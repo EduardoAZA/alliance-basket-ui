@@ -34,7 +34,7 @@ export default function Signup() {
       .then((response) => {
         localStorage.setItem('token', response.data.token)
         const id = response.data.user.id
-        return navigate(`/home/${id}`)
+        return navigate(`/${id}`)
       })
       .catch((error) => {
         toast.error("Email ja cadastrado", error);
