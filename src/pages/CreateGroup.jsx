@@ -54,6 +54,8 @@ export default function CreateGroup() {
     }
   )
 
+  const [users, Setusers] = useState([])
+
   function SearchClients(event) {
     const { value } = event.target;
     setFields({ email: value });
@@ -61,17 +63,14 @@ export default function CreateGroup() {
     if (value.length >= 3) {
       api.post(`/clients/search`, { email: value }, { headers: { 'Authorization': localStorage.getItem('token') } })
         .then((response) => {
-          console.log("Received response from backend:", response.data);
+          Setusers(response.data.users);
+          console.log(users)
         })
         .catch((error) => {
           console.error("Error fetching clients:", error);
         });
     }
   }
-
-
-
-
 
   return (
     <div className="h-screen flex flex-col">
@@ -164,7 +163,11 @@ export default function CreateGroup() {
                       <DialogDescription>
                         <div className="flex flex-col w-full">
                           <input type="text" placeholder="membro" onChange={SearchClients} className="border border-grey-5800 py-2 pl-2" />
-
+                          {users.map((user, index) => (
+                            <div key={index} className="bg-white rounded-xl flex flex-col relative max-w-96" >
+                              <p>{user.email}</p>
+                            </div>
+                          ))}
                         </div>
                       </DialogDescription>
 
