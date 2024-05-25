@@ -4,60 +4,17 @@ import "./index.css";
 import { Toaster } from "sonner";
 import App from "./App";
 
-import Home from "./routes/home";
-import Profile from "./routes/profile";
-import Login from "./routes/login";
-import Signup from "./routes/signup";
-import ErrorPage from "./routes/ErrorPage";
-import CreateGroup from "./routes/CreateGroup";
-import MyGroups from "./routes/MyGroups";
-
-// 1 - Router configuration
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
-const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <Login />
-  },
-  {
-    path: "/home/:id",
-    element: <Home />
-  },
-  {
-    path: "/perfil/:id",
-    element: <Profile />
-  },
-  {
-    path: "/cadastro",
-    element: <Signup />
-  },
-  {
-    path: "/criar-grupo/:id",
-    element: <CreateGroup />
-  },
-  {
-    path: "/meus-grupos",
-    element: <Signup />
-  },
-  {
-    path: "/entrar"
-  },
-  {
-    path: "*",
-    element: <ErrorPage />
-  },
-  // Rota para usuários deslogados
-  {
-    path: "/home",
-    element: <Home />
-  }
-])
-
+import Home from "./pages/home";
+import Profile from "./pages/profile";
+import Login from "./pages/login";
+import Signup from "./pages/signup";
+import ErrorPage from "./pages/ErrorPage";
+import CreateGroup from "./pages/CreateGroup";
+import MyGroups from "./pages/MyGroups";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <App/>
     <Toaster position="top-right" richColors expand={true} />
   </React.StrictMode>
 );
