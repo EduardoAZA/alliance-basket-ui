@@ -56,7 +56,7 @@ export default function Header() {
                                         <Link to="/criar-grupo" className='font-bold text-lg cursor-pointer text-primary-dark hover:text-meteorite-dark transition-all duration-300 hover:text-xl hover:duration-200'>Criar grupo</Link>
                                     </li>
                                     <li className='max-[767px]:pt-5'>
-                                        <Link to="/login" className='font-bold text-lg cursor-pointer text-primary-dark hover:text-meteorite-dark transition-all duration-300 hover:text-xl hover:duration-200'>Meus grupos</Link>
+                                        <Link to={`/meus-grupos/${id}`} className='font-bold text-lg cursor-pointer text-primary-dark hover:text-meteorite-dark transition-all duration-300 hover:text-xl hover:duration-200'>Meus grupos</Link>
                                     </li>
                                     <li className='max-[767px]:pt-5'>
                                         <Link to="/login" className='font-bold text-lg cursor-pointer text-primary-dark hover:text-meteorite-dark transition-all duration-300 hover:text-xl hover:duration-200'>Sobre nós</Link>

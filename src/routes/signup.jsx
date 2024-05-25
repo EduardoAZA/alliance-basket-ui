@@ -7,7 +7,6 @@ import { faEnvelope, faLock, faUser, faUserAlt, faEye, faEyeSlash } from "@forta
 import { Toaster, toast } from 'sonner'
 import { useState,useEffect } from "react";
 import { Link, createHashRouter, useParams, useNavigate  } from "react-router-dom";
-
 export default function Signup() {
 
   //Initializate AOS
