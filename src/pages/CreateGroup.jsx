@@ -23,6 +23,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Search } from "lucide-react";
+import api from "@/services/api";
 
 
 export default function CreateGroup() {
@@ -35,6 +37,41 @@ export default function CreateGroup() {
   const { register, handleSubmit } = useForm();
   const [data, setData] = useState("");
   const onSubmit = data => console.log(data);
+
+  // api.get(`/clients/${id}`, { headers: { 'authorization': localStorage.getItem('token') } })
+  //   .then((response) => {
+  //     console.log("Received response from backend:", response.data);
+  //     setUser(response.data);
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error fetching clients:", error);
+  //   });
+
+
+  const [fields, setFields] = useState(
+    {
+      email: ""
+    }
+  )
+
+  function SearchClients(event) {
+    const { value } = event.target;
+    setFields({ email: value });
+
+    if (value.length >= 3) {
+      api.post(`/clients/search`, { email: value }, { headers: { 'Authorization': localStorage.getItem('token') } })
+        .then((response) => {
+          console.log("Received response from backend:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching clients:", error);
+        });
+    }
+  }
+
+
+
+
 
   return (
     <div className="h-screen flex flex-col">
@@ -121,11 +158,15 @@ export default function CreateGroup() {
                             Todos os usuários podem criar despesas
                           </label>
                         </div>
-                        
+
 
                       </DialogDescription>
+                      <DialogDescription>
+                        <div className="flex flex-col w-full">
+                          <input type="text" placeholder="membro" onChange={SearchClients} className="border border-grey-5800 py-2 pl-2" />
 
-
+                        </div>
+                      </DialogDescription>
 
                       <div className="flex items-center justify-center pt-2">
                         <input type="submit" className="bg-primary py-3 w-1/5 text-white rounded-md" placeholder="submit" />

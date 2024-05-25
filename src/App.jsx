@@ -12,6 +12,7 @@ function App() {
           <Routes>
             <Route element={<PrivateRoutes />}>
                 <Route element={<CreateGroup/>} path="/criar-grupo" exact/>
+                <Route element={<Home/>} path="/:id"/>
             </Route>
             <Route element={<Login/>} path="/login"/>
             <Route element={<Home/>} path="/"/>
