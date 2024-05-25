@@ -5,8 +5,9 @@ import api from "@/services/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock, faUser, faUserAlt, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Toaster, toast } from 'sonner'
-import { useState,useEffect } from "react";
-import { Link, createHashRouter, useParams, useNavigate  } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, createHashRouter, useParams, useNavigate } from "react-router-dom";
+
 export default function Signup() {
 
   //Initializate AOS
@@ -21,9 +22,6 @@ export default function Signup() {
     email: '',
     password: ''
   })
-
-  const { id } = useParams();
-
   const handleChange = (event) => {
     const { name, value } = event.target
     setDetails((prev) => {
@@ -36,7 +34,7 @@ export default function Signup() {
       .then((response) => {
         localStorage.setItem('token', response.data.token)
         const id = response.data.user.id
-        return navigate(`/home/${id}`)
+        return navigate(`/${id}`)
       })
       .catch((error) => {
         toast.error("Email ja cadastrado", error);
@@ -104,7 +102,7 @@ export default function Signup() {
         <Link to="/home" className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
       </div>
       <div className="w-full h-screen flex items-center justify-center bg-gradient-to-b from-white via-primary-light to-primary ">
-        <div data-aos="zoom-in" data-aos-duration="600"  className="w-3/5 h-3/5  flex bg-white rounded-3xl shadow-md" >
+        <div data-aos="zoom-in" data-aos-duration="600" className="w-3/5 h-3/5  flex bg-white rounded-3xl shadow-md" >
           <div className="w-1/2 h-full flex flex-col justify-center items-center bg-primary rounded-tl-3xl rounded-bl-3xl rounded-tr-[60px] rounded-br-[60px]">
             <h1 className="text-white text-3xl font-bold">Seja bem-vindo</h1>
 
@@ -154,9 +152,9 @@ export default function Signup() {
                       onChange={handleChange}
                     />
                     {showPassword.password ? (
-                      <FontAwesomeIcon icon={faEyeSlash} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('password')} />
-                    ) : (
                       <FontAwesomeIcon icon={faEye} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('password')} />
+                    ) : (
+                      <FontAwesomeIcon icon={faEyeSlash} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('password')} />
                     )}
                   </div>
                 </div>
@@ -171,10 +169,10 @@ export default function Signup() {
                       onChange={handleChange}
                     />
                     {showPassword.confirmPassword ? (
-                      <FontAwesomeIcon icon={faEyeSlash} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('confirmPassword')} />
+                       <FontAwesomeIcon icon={faEye} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('confirmPassword')} />
                     ) : (
-                      <FontAwesomeIcon icon={faEye} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('confirmPassword')} />
-                    )}
+                      <FontAwesomeIcon icon={faEyeSlash} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('confirmPassword')} />
+                     )}
                   </div>
                 </div>
               </div>
