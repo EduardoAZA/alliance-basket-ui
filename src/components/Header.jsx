@@ -10,11 +10,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
+import { useNavigate } from "react-router-dom";
 import React, { useState } from 'react'
 import { useEffect } from 'react';
 
 export default function Header() {
+    const navigate = useNavigate();
 
     const [open, setOpen] = useState(false);
 
@@ -28,17 +29,12 @@ export default function Header() {
         const token = localStorage.getItem('token');
         setIsLoggedIn(!!token);
     }, []);
-
     function handleLogout() {
         localStorage.removeItem('token');
         setIsLoggedIn(false);
-        return navigate('/login') 
+        window.location.href = '/login';
     }
-
     const { id } = useParams();
-
-    
-
     return (
         <>
             <header className='sticky top-0 w-full bg-white z-100 p-3 shadow-md'>
@@ -102,7 +98,7 @@ export default function Header() {
                         <div onClick={() => setOpen(!open)}>
                             <FontAwesomeIcon icon={faBars} className='text-xl cursor-pointer md:hidden ' />
                         </div>
-                        
+
                     </div>
                 </nav>
 

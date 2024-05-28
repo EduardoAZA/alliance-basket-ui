@@ -8,26 +8,28 @@ import ErrorPage from './pages/ErrorPage';
 import Profile from './pages/profile';
 import Signup from './pages/signup';
 import MyGroups from './pages/MyGroups';
-
+import Group from './pages/Group';
 function App() {
   return (
     <div className="App">
-        <Router>
-          <Routes>
-            <Route element={<PrivateRoutes />}>
-                <Route element={<CreateGroup/>} path="/criar-grupo/:id" exact/>
-                <Route element={<MyGroups/>} path="/meus-grupos/:id" exact/>
-                <Route element={<Profile/>} path="/perfil/:id" exact/>
-                <Route element={<Home/>} path="/:id"/>
-            </Route>
-            <Route element={<Login/>} path="/login"/>
-            <Route element={<Home/>} path="/"/>
-            <Route element={<Signup/>} path="/cadastro"/>
-            <Route element={<ErrorPage/>} path="*"/>
-          </Routes>
+      <Router>
+        <Routes>
+          <Route element={<PrivateRoutes />}>
+            <Route element={<Home />} path="/:id" />
+            <Route element={<CreateGroup />} path="/criar-grupo/:id" exact />
+            <Route element={<MyGroups />} path="/meus-grupos/:id" exact />
+            <Route element={<Profile />} path="/perfil/:id" exact />
+            <Route element={<Group/>} path="/grupo/:id/cliente/:idGroup" exact/> 
+          </Route>
+          <Route element={<Login />} path="/login" />
+          <Route element={<Home />} path="/" />
+          <Route element={<Signup />} path="/cadastro" />
+          <Route element={<ErrorPage />} path="*" />
+        </Routes>
       </Router>
     </div>
   );
 }
+
 
 export default App;

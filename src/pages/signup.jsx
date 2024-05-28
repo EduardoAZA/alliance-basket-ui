@@ -20,7 +20,7 @@ export default function Signup() {
   const [details, setDetails] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
   })
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -169,12 +169,15 @@ export default function Signup() {
                       onChange={handleChange}
                     />
                     {showPassword.confirmPassword ? (
-                       <FontAwesomeIcon icon={faEye} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('confirmPassword')} />
+                      <FontAwesomeIcon icon={faEye} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('confirmPassword')} />
                     ) : (
                       <FontAwesomeIcon icon={faEyeSlash} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('confirmPassword')} />
-                     )}
+                    )}
                   </div>
+
+
                 </div>
+                
               </div>
               <button className="w-3/5 text-lg font-medium p-3 rounded-md outline-none border-none bg-primary text-white hover:bg-meteorite-dark transition-all duration-300 mt-[7%]" type="submit">Cadastrar</button>
             </form>

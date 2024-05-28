@@ -1,5 +1,7 @@
 import Aos from "aos";
 import 'aos/dist/aos.css';
+import axios from "axios";
+import api from "@/services/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCheck, faClose, fa1, fa2, fa3, fa4, fa5, fa6 } from "@fortawesome/free-solid-svg-icons"
 import { useState, useEffect } from "react"
@@ -13,22 +15,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter
 } from "@/components/ui/dialog"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { useParams } from "react-router-dom";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Search } from "lucide-react";
-import api from "@/services/api";
-
-
+import { Check, Search } from "lucide-react";
+import Select from 'react-select'
+import makeAnimated from 'react-select/animated';
+import { Toaster, toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 export default function CreateGroup() {
+
+  const navigate = useNavigate();
   const { id } = useParams();
   //Initializate AOS
   useEffect(() => {
@@ -36,42 +33,52 @@ export default function CreateGroup() {
   }, [])
 
   const { register, handleSubmit } = useForm();
-  const [data, setData] = useState("");
-  const onSubmit = data => console.log(data);
-
-  // api.get(`/clients/${id}`, { headers: { 'authorization': localStorage.getItem('token') } })
-  //   .then((response) => {
-  //     console.log("Received response from backend:", response.data);
-  //     setUser(response.data);
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error fetching clients:", error);
-  //   });
 
 
-  const [fields, setFields] = useState(
-    {
-      email: ""
+  const animatedComponents = makeAnimated();
+
+  const options = [
+    { value: 'Trabalho', label: 'Trabalho' },
+    { value: 'Viagem', label: 'Viagem' },
+    { value: 'Casa', label: 'Casa' },
+    { value: 'Evento', label: 'Evento' },
+    { value: 'Grupo', label: 'Grupo' },
+  ]
+
+  const [inputValue, setInputValue] = useState('');
+  const [values, setValues] = useState([]);
+
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  const inviteSubmit = (event) => {
+    event.preventDefault();
+    if (inputValue.trim() !== '') {
+      setValues([...values, inputValue]);
+      setInputValue('');
     }
-  )
+  };
 
-  const [users, Setusers] = useState([])
+  const inviteRemove = (index, event) => {
+    event.preventDefault();
+    const newValues = [...values];
+    newValues.splice(index, 1);
+    setValues(newValues);
+  };
 
-  function SearchClients(event) {
-    const { value } = event.target;
-    setFields({ email: value });
-
-    if (value.length >= 3) {
-      api.post(`/clients/search`, { email: value }, { headers: { 'Authorization': localStorage.getItem('token') } })
-        .then((response) => {
-          Setusers(response.data.users);
-          console.log(users)
-        })
-        .catch((error) => {
-          console.error("Error fetching clients:", error);
-        });
-    }
+  function onSubmit(data, event) {
+    api.post(`/groups/clients/${id}`, data, { headers: { 'Authorization': localStorage.getItem('token') } })
+      .then((response) => {
+        console.log("Received response from backend:", response.data);
+        const idGroup = response.data.group.id
+        console.log(data)
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
+
 
   return (
     <div className="h-screen flex flex-col">
@@ -102,7 +109,7 @@ export default function CreateGroup() {
               <Dialog>
                 <DialogTrigger className="bg-success-dark py-4 px-8 text-xl font-bold text-white rounded-xl">Criar grupo</DialogTrigger>
                 <DialogContent>
-                  <form onSubmit={handleSubmit(onSubmit)}>
+                  <form onSubmit={handleSubmit((data) => onSubmit({ ...data, invites: values }))}>
                     <DialogHeader className="flex flex-col gap-5">
 
                       <DialogTitle className="text-3xl text-center font-bold">Criar grupo</DialogTitle>
@@ -128,31 +135,21 @@ export default function CreateGroup() {
                         </select>
                       </DialogDescription>
                       <DialogDescription className="pl-4 flex flex-col text-xl ">
-                        {/* <RadioGroup defaultValue="option-one">
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem className="size-4" value="option-one" id="option-one" />
-                            <label htmlFor="option-one" className="text-dark">Apenas o administrador criar despesa</label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="option-two" id="option-two" />
-                            <label htmlFor="option-two" className="text-dark">Todos criarem despesas</label>
-                          </div>
-                        </RadioGroup> */}
                         <div className="flex flex-col">
                           <label htmlFor="field-rain" className="flex gap-2">
                             <input
-                              {...register("allow_edit")}
+                              {...register("allowEdit")}
                               type="radio"
-                              value="0"
+                              value="false"
                               id="field-rain"
                             />
                             Apenas o admnistrador pode criar despesas
                           </label>
                           <label htmlFor="field-rain" className="flex gap-2">
                             <input
-                              {...register("allow_edit")}
+                              {...register("allowEdit")}
                               type="radio"
-                              value="1"
+                              value="true"
                               id="field-rain"
                             />
                             Todos os usuários podem criar despesas
@@ -162,13 +159,25 @@ export default function CreateGroup() {
 
                       </DialogDescription>
                       <DialogDescription>
-                        <div className="flex flex-col w-full">
-                          <input type="text" placeholder="membro" onChange={SearchClients} className="border border-grey-5800 py-2 pl-2" />
-                          {users.map((user, index) => (
-                            <div key={index} className="bg-white rounded-xl flex flex-col relative max-w-96" >
-                              <p>{user.email}</p>
-                            </div>
-                          ))}
+                        <div className="">
+                          <div className="flex gap-10">
+                            <input
+                              type="text"
+                              value={inputValue}
+                              onChange={handleChange}
+                              placeholder="Digite um valor"
+                              className="border w-4/5 p-2"
+                            />
+                            <button onClick={inviteSubmit} className="border px-3">Adicionar</button>
+                          </div>
+                          <div>
+                            {values.map((value, index) => (
+                              <div key={index}>
+                                <span>{value}</span>
+                                <button onClick={(event) => inviteRemove(index, event)}>Remover</button>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </DialogDescription>
 
@@ -181,8 +190,6 @@ export default function CreateGroup() {
                 </DialogContent>
               </Dialog>
             </div>
-
-
           </div>
         </div>
       </div>
