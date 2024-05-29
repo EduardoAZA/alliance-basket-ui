@@ -82,9 +82,9 @@ export default function Login() {
     <>
       <div data-aos="zoom-in" data-aos-duration="600" className="absolute top-6 left-6 max-[600px]:left-1/2 max-[600px]:-translate-x-1/2">
         {id ? (
-          <Link to={`/home/${id}`} className='font-bold text-3xl text-white hover:text-primary-light transition-all duration-300'> AllianceBasket</Link>
+          <Link to={`/home/${id}`} className='font-bold text-3xl text-primary hover:text-meteorite-dark transition-all duration-300'> AllianceBasket</Link>
         ) : (
-          <Link to="/home" className='font-bold text-3xl text-white hover:text-gray-400 transition-all duration-300'> AllianceBasket</Link>
+          <Link to="/home" className='font-bold text-3xl text-primary hover:text-meteorite-dark transition-all duration-300'> AllianceBasket</Link>
         )}</div>
       <div className='w-full h-screen flex justify-center items-center bg-gradient-to-b from-dark via-primary-dark to-primary  '>
         <div data-aos="zoom-in" data-aos-duration="600" className="py-16 px-12 text-center shadow-normal rounded-lg bg-white max-[600px]:w-full max-[600px]:flex max-[600px]:flex-col max-[600px]:items-center  ">

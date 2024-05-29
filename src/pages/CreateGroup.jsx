@@ -182,7 +182,7 @@ export default function CreateGroup() {
                       </div>
 
                       <div className="flex items-center justify-center pt-2">
-                        <input type="submit" className="bg-primary py-3 w-1/5 text-white rounded-md  cursor-pointer hover:bg-meteorite-dark" placeholder="submit" />
+                        <button type="submit" className="bg-primary py-3 w-1/5 text-white rounded-md  cursor-pointer hover:bg-meteorite-dark" placeholder="submit" > Criar</button>
                       </div>
 
                     </DialogHeader>

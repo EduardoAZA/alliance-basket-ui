@@ -1,6 +1,6 @@
 
 import Header from "@/components/Header"
-import { faCircleCheck, faPlusCircle, faRightFromBracket, faHandHoldingDollar } from "@fortawesome/free-solid-svg-icons"
+import { faCircleCheck, faPlusCircle,faEllipsisH, faRightFromBracket, faHandHoldingDollar } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useParams } from "react-router-dom"
 import Expense from "@/components/Expense"
@@ -151,6 +151,7 @@ export default function Group() {
         console.error("Error fetching clients:", error);
       });
   }
+
   
 
   return (
@@ -238,12 +239,17 @@ export default function Group() {
               <h1 className="text-6xl font-bold text-center text-dark-primary">Despesas</h1>
               <div className="flex flex-col items-center gap-5">
                 <div className="w-full h-[20%]">
-
-                  <div className="w-full h-full max-h-[31rem] min-h-[31rem] overflow-y-auto scrollbar-thin scrollbar-hidden flex flex-col items-center gap-5">
-                    {Array.isArray(expenses) && expenses.slice().reverse().map((expense, index) => (
-                      <Expense key={index} nome={expense.name} valor={expense.value} data={expense.createdAt} pagante={usersName.find(cliente => cliente.id === expense.id_client)?.name} />
-                    ))}
-                  </div>
+                  {expenses.length === 0 ? (
+                    <div className="max-h-[31rem] min-h-[31rem] flex justify-center">
+                        <p className="text-center border-b border-primary p-5 text-3xl text-primary h-1/3">Adicione sua primeira despesa</p>
+                    </div>
+                  ) : (
+                    <div className="w-full h-full max-h-[31rem] min-h-[31rem] overflow-y-auto scrollbar-thin scrollbar-hidden flex flex-col items-center gap-5">
+                      {expenses.slice().reverse().map((expense, index) => (
+                        <Expense key={index} nome={expense.name} valor={expense.value} data={expense.createdAt} idExpense={expense.id} pagante={usersName.find(cliente => cliente.id === expense.id_client)?.name} />
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <div className="flex gap-10 w-full justify-center pt-2">
                   <Dialog>
@@ -264,7 +270,7 @@ export default function Group() {
 
                         <div className="grid grid-cols-4 items-center text-right gap-3" >
                           <label htmlFor="name" className="font-semibold">Valor</label>
-                          <input  {...register("value", { required: true })} className="col-span-3 border p-1 rounded-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" type="number" id="name" />
+                          <input  {...register("value", { required: true })} className="col-span-3 border p-1 rounded-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" type="text" id="name" />
                         </div>
                         <DialogFooter>
                           <button className="border px-4 py-1 rounded-md font-semibold">Cancelar</button>

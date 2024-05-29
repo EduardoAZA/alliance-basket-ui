@@ -68,7 +68,7 @@ export default function Signup() {
 
     // Verificação de letra maiscula
     if (!/[A-Z]/.test(details.password)) {
-      toast.error("Sua senha deve conter uma letra minúscula");
+      toast.error("Sua senha deve conter uma letra Maiúscula");
       return;
     }
 

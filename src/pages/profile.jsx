@@ -43,7 +43,7 @@ export default function Profile() {
 
   const [newData, setNewData] = useState({
     name: "",
-    email: ""
+   // email: ""
   })
 
   const handleChangeData = (e) => {
@@ -59,11 +59,9 @@ export default function Profile() {
   }
 
   function updateClient(newData) {
-    console.log(newData.email)
     api.put(`/clients/${id}`, newData, { headers: { 'Authorization': localStorage.getItem('token') } })
       .then((response) => {
-        console.log(response.data)
-        setUser(newData);
+        setUser(response.data); // Atualiza os dados completos do usuário
         toast.success("Profile updated successfully");
       })
       .catch((error) => {
@@ -208,7 +206,7 @@ export default function Profile() {
                             onChange={handleChangeData}
                           />
                         </div>
-                        <div>
+                        {/* <div>
                           <label htmlFor="" className="outline-none text-dark  text-lg font-bold">Email</label>
                           <input
                             type="text"
@@ -217,7 +215,7 @@ export default function Profile() {
                             placeholder={user.email}
                             onChange={handleChangeData}
                           />
-                        </div>
+                        </div> */}
                       </div>
                       <button type="submit" className="w-2/5 bg-green-500 py-2 mt-5 text-white font-bold rounded-md hover:bg-green-700 transition-all duration-300">Salvar</button>
                     </form>
