@@ -20,6 +20,7 @@ import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
 import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form";
+import { toast } from "sonner"
 
 
 export default function Group() {
@@ -43,8 +44,8 @@ export default function Group() {
         console.error("Error fetching clients:", error);
       });
   }, [id]);
-  
-  const [users,setUsers] = useState([])
+
+  const [users, setUsers] = useState([])
   const [idValues, setIdValues] = useState([]);
   useEffect(() => {
     console.log("Fazendo requisição para o backend...");
@@ -57,7 +58,7 @@ export default function Group() {
       .catch((error) => {
         console.error("Erro ao buscar os IDs:", error);
       });
-  }, [idGroup]); // Se idGroup é uma variável de dependência
+  }, [idGroup]);
 
   useEffect(() => {
     api.get(`/clients/${id}`, { headers: { 'Authorization': localStorage.getItem('token') } })
@@ -70,14 +71,40 @@ export default function Group() {
       });
   }, [id]);
 
+  const [usersName, setUsersName] = useState([])
+  useEffect(() => {
+    api.get(`/groups/${idGroup}/members`, { headers: { 'Authorization': localStorage.getItem('token') } })
+      .then((response) => {
+        const name = response.data.map(item => item);
+        setUsersName(name)
+      })
+      .catch((error) => {
+        console.error("Error fetching clients:", error);
+      });
+  }, [id]);
+
+  const [expenses, setExpenses] = useState([])
+  useEffect(() => {
+    console.log(idGroup)
+    api.get(`expenses/group/${idGroup}`, { headers: { 'Authorization': localStorage.getItem('token') } })
+      .then((response) => {
+        console.log("despesa")
+        const expense = response.data.map(item => item);
+        setExpenses(expense)
+        console.log(expense)
+      })
+      .catch((error) => {
+        console.error("Error fetching clients:", error);
+      });
+  }, [id]);
+
+
+
   const animatedComponents = makeAnimated();
-  const members = [
-    { value: 'Duca@gmail.com', label: 'Duca@gmail.com' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'vanillas', label: 'Vanilla' },
-    { value: 'vanillass', label: 'Vanilla' },
-  ]
+
+  function teste() {
+    console.log(teste)
+  }
 
   const [inputValue, setInputValue] = useState('');
   const [values, setValues] = useState([]);
@@ -111,6 +138,20 @@ export default function Group() {
         console.error("Error fetching clients:", error);
       });
   }
+  const [open, setOpen] = useState(false);
+  function createExpense(expenseValues) {
+    api.post(`expenses/client/${id}/group/${idGroup}`, expenseValues, { headers: { 'Authorization': localStorage.getItem('token') } })
+      .then((response) => {
+        // Atualiza o estado das despesas com a nova despesa criada
+        setExpenses([...expenses, response.data]);
+        // Exibe uma mensagem de sucesso
+        toast.success('Dispesa criada com sucesso');
+      })
+      .catch((error) => {
+        console.error("Error fetching clients:", error);
+      });
+  }
+  
 
   return (
     <div className="h-screen flex flex-col">
@@ -133,14 +174,9 @@ export default function Group() {
               </div>
               <h1 className=" text-2xl font-bold ">Membros: {idValues.length} </h1>
               <div className=" min-h-52 overflow-y-auto  scrollbar-thin scrollbar-hidden">
-                <div>
-                  <Member nome="duca"/>
-                  <Member />
-                  <Member />
-                  <Member />
-                  <Member />
-                  <Member />
-                </div>
+                {usersName.map((nome, index) => (
+                  <Member key={index} nome={nome.name} />
+                ))}
               </div>
             </div>
 
@@ -148,7 +184,7 @@ export default function Group() {
 
 
               <Dialog>
-                <DialogTrigger className="flex items-center justify-center border-t-2 gap-2 relative">
+                {/* <DialogTrigger className="flex items-center justify-center border-t-2 gap-2 relative">
                   <p className=" text-green-500 font-semibold text-xl py-2 w-full">Adicionar Membro</p>
                   <FontAwesomeIcon className="text-lg text-green-500 font-bold absolute left-[5.8rem]" icon={faPlusCircle} />
                 </DialogTrigger>
@@ -171,9 +207,9 @@ export default function Group() {
                     </div>
                     <div>
                       {values.map((value, index) => (
-                        <div key={index}>
-                          <span>{value}</span>
-                          <button onClick={(event) => inviteRemove(index, event)}>Remover</button>
+                        <div key={index} className="flex mt-5 justify-between border-b border-primary-dark">
+                          <p className="pb-2 text-lg font-bold">{value}</p>
+                          <button className="px-4 border bg-red-500 text-white hover:bg-red-600 rounded-md" onClick={(event) => inviteRemove(index, event)}>Remover</button>
                         </div>
                       ))}
                     </div>
@@ -184,7 +220,7 @@ export default function Group() {
                     </DialogFooter>
                   </form>
 
-                </DialogContent>
+                </DialogContent> */}
               </Dialog>
 
 
@@ -203,15 +239,10 @@ export default function Group() {
               <div className="flex flex-col items-center gap-5">
                 <div className="w-full h-[20%]">
 
-                  <div className="w-full h-full max-h-[31rem] overflow-y-auto scrollbar-thin scrollbar-hidden flex flex-col items-center gap-5">
-                    <Expense />
-                    <Expense />
-                    <Expense />
-                    <Expense />
-                    <Expense />
-                    <Expense />
-                    <Expense />
-                    <Expense />
+                  <div className="w-full h-full max-h-[31rem] min-h-[31rem] overflow-y-auto scrollbar-thin scrollbar-hidden flex flex-col items-center gap-5">
+                    {Array.isArray(expenses) && expenses.slice().reverse().map((expense, index) => (
+                      <Expense key={index} nome={expense.name} valor={expense.value} data={expense.createdAt} pagante={usersName.find(cliente => cliente.id === expense.id_client)?.name} />
+                    ))}
                   </div>
                 </div>
                 <div className="flex gap-10 w-full justify-center pt-2">
@@ -222,29 +253,22 @@ export default function Group() {
                     <DialogContent>
                       <DialogHeader>
                         <DialogTitle>Adicionar Despesa</DialogTitle>
-                        <DialogDescription>Adicione a despesa e os integrantes.</DialogDescription>
+                        <DialogDescription>Crie agora sua despesa</DialogDescription>
                       </DialogHeader>
 
-                      <form className="space-y-6">
+                      <form className="space-y-6" onSubmit={handleSubmit(createExpense)}>
                         <div className="grid grid-cols-4 items-center text-right gap-3">
                           <label htmlFor="name" className="font-semibold">Nome</label>
-                          <input className="col-span-3 border p-1 rounded-md" type="text" id="name" />
+                          <input   {...register("name", { required: true })} className="col-span-3 border p-1 rounded-md" id="name" />
                         </div>
 
                         <div className="grid grid-cols-4 items-center text-right gap-3" >
                           <label htmlFor="name" className="font-semibold">Valor</label>
-                          <input className="col-span-3 border p-1 rounded-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" type="number" id="name" />
+                          <input  {...register("value", { required: true })} className="col-span-3 border p-1 rounded-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" type="number" id="name" />
                         </div>
-
-                        <div className="grid grid-cols-4 items-center text-right gap-3">
-                          <label htmlFor="name" className="font-semibold">Participante</label>
-                          <Select options={members} className="col-span-3" isMulti closeMenuOnSelect={false}
-                            components={animatedComponents} />
-                        </div>
-
                         <DialogFooter>
                           <button className="border px-4 py-1 rounded-md font-semibold">Cancelar</button>
-                          <button className="border px-4 py-1 rounded-md bg-primary-dark font-semibold text-white">Salvar</button>
+                          <button className="border px-4 py-1 rounded-md bg-primary-dark font-semibold text-white">Criar</button>
                         </DialogFooter>
                       </form>
 
@@ -259,12 +283,10 @@ export default function Group() {
                         <DialogTitle>Quitar dívida</DialogTitle>
                         <DialogDescription>Escolha o usuário e o valor que será quitado.</DialogDescription>
                       </DialogHeader>
-
+                      {/* 
                       <form className="space-y-6">
                         <div className="grid grid-cols-4 items-center text-right gap-3">
-                          <label htmlFor="name" className="font-semibold">Participante</label>
-                          <Select options={members} className="col-span-3 text-left" isMulti closeMenuOnSelect={false}
-                            components={animatedComponents} />
+                  
                         </div>
                         <div className="grid grid-cols-4 items-center text-right gap-3" >
                           <label htmlFor="name" className="font-semibold">Valor</label>
@@ -275,7 +297,7 @@ export default function Group() {
                           <button className="border px-4 py-1 rounded-md font-semibold">Cancelar</button>
                           <button className="border px-4 py-1 rounded-md bg-primary-dark font-semibold text-white">Pagar</button>
                         </DialogFooter>
-                      </form>
+                      </form> */}
 
                     </DialogContent>
                   </Dialog>

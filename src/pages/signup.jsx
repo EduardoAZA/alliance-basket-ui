@@ -16,11 +16,11 @@ export default function Signup() {
   }, [])
 
   const navigate = useNavigate();
-
+  //Valores do form
   const [details, setDetails] = useState({
     name: '',
     email: '',
-    password: '',
+    password: ''
   })
   const handleChange = (event) => {
     const { name, value } = event.target

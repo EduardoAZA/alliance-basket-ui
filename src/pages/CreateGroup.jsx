@@ -72,7 +72,7 @@ export default function CreateGroup() {
       .then((response) => {
         console.log("Received response from backend:", response.data);
         const idGroup = response.data.group.id
-        console.log(data)
+        navigate(`/grupo/${idGroup}/cliente/${id}`)
       })
       .catch((error) => {
         console.error(error);
@@ -113,52 +113,52 @@ export default function CreateGroup() {
                     <DialogHeader className="flex flex-col gap-5">
 
                       <DialogTitle className="text-3xl text-center font-bold">Criar grupo</DialogTitle>
-                      <DialogDescription className="flex flex-col text-xl ">
-                        <label htmlFor="" className="text-dark ">Nome do grupo</label>
+                      <div className="flex flex-col text-xl ">
+                        <label className="text-dark">Nome do grupo</label>
                         <input
                           {...register("name", { required: true })}
-                          className="border border-grey-5800 pl-2"
+                          className="border border-dark-primary rounded-sm pl-2"
                         />
-                      </DialogDescription>
-                      <DialogDescription className="flex flex-col text-xl ">
+                      </div>
+                      <div className="flex flex-col text-xl ">
                         <label htmlFor="" className="text-dark ">Descrição</label>
-                        <textarea  {...register("description")} className="border resize-none h-40 p-2 border-grey-5800"></textarea>
-                      </DialogDescription>
-                      <DialogDescription className="flex flex-col text-xl ">
-                        <select {...register("type", { required: true })}>
-                          <option value="">Select...</option>
+                        <textarea  {...register("description")} className="border border-dark-primary rounded-sm resize-none h-40 p-2 border-grey-5800"></textarea>
+                      </div>
+                      <div className="flex flex-col text-xl ">
+                        <select {...register("type", { required: true })} className=" border border-dark-primary rounded-sm">
+                          <option value="">Tipo do grupo</option>
                           <option value="Trabalho">Trabalho</option>
                           <option value="Viagem">Viagem</option>
                           <option value="Casa">Casa</option>
                           <option value="Evento">Evento</option>
                           <option value="Grupo">Grupo</option>
                         </select>
-                      </DialogDescription>
-                      <DialogDescription className="pl-4 flex flex-col text-xl ">
+                      </div>
+                      <div className="pl-4 flex flex-col text-xl ">
                         <div className="flex flex-col">
-                          <label htmlFor="field-rain" className="flex gap-2">
+                          <label htmlFor="admin" className="flex gap-2">
                             <input
                               {...register("allowEdit")}
                               type="radio"
                               value="false"
-                              id="field-rain"
+                              id="admin"
                             />
                             Apenas o admnistrador pode criar despesas
                           </label>
-                          <label htmlFor="field-rain" className="flex gap-2">
+                          <label htmlFor="allUsers" className="flex gap-2">
                             <input
                               {...register("allowEdit")}
                               type="radio"
                               value="true"
-                              id="field-rain"
+                              id="allUsers"
                             />
                             Todos os usuários podem criar despesas
                           </label>
                         </div>
 
 
-                      </DialogDescription>
-                      <DialogDescription>
+                      </div>
+                      <div>
                         <div className="">
                           <div className="flex gap-10">
                             <input
@@ -166,23 +166,23 @@ export default function CreateGroup() {
                               value={inputValue}
                               onChange={handleChange}
                               placeholder="Digite um valor"
-                              className="border w-4/5 p-2"
+                              className="border border-dark-primary rounded-sm w-4/5 p-2 "
                             />
-                            <button onClick={inviteSubmit} className="border px-3">Adicionar</button>
+                            <button onClick={inviteSubmit} className="border-2 border-primary-dark rounded-sm px-3 text-primary-dark hover:bg-gray-200">Adicionar</button>
                           </div>
                           <div>
                             {values.map((value, index) => (
-                              <div key={index}>
-                                <span>{value}</span>
-                                <button onClick={(event) => inviteRemove(index, event)}>Remover</button>
+                              <div key={index} className="flex mt-5 justify-between border-b border-primary-dark">
+                                <p className="pb-2 text-lg font-bold">{value}</p>
+                                <button className="px-4 border bg-red-500 text-white hover:bg-red-600 rounded-md" onClick={(event) => inviteRemove(index, event)}>Remover</button>
                               </div>
                             ))}
                           </div>
                         </div>
-                      </DialogDescription>
+                      </div>
 
                       <div className="flex items-center justify-center pt-2">
-                        <input type="submit" className="bg-primary py-3 w-1/5 text-white rounded-md" placeholder="submit" />
+                        <input type="submit" className="bg-primary py-3 w-1/5 text-white rounded-md  cursor-pointer hover:bg-meteorite-dark" placeholder="submit" />
                       </div>
 
                     </DialogHeader>

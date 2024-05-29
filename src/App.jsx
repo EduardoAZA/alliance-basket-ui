@@ -19,7 +19,7 @@ function App() {
             <Route element={<CreateGroup />} path="/criar-grupo/:id" exact />
             <Route element={<MyGroups />} path="/meus-grupos/:id" exact />
             <Route element={<Profile />} path="/perfil/:id" exact />
-            <Route element={<Group/>} path="/grupo/:id/cliente/:idGroup" exact/> 
+            <Route element={<Group/>} path="/grupo/:idGroup/cliente/:id" exact/> 
           </Route>
           <Route element={<Login />} path="/login" />
           <Route element={<Home />} path="/" />

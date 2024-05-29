@@ -89,7 +89,7 @@ export default function MyGroups() {
                   <p className="text-dark-primary pl-5 pr-5 pt-3 pb-6 mt-2 text-left text-sm ">{group.description}</p>
                    </div>
                 <div className="flex flex-grow w-full  justify-center pb-6 items-end">
-                  <Link to={`/grupo/${id}/cliente/${group.id}`} className="hover:bg-meteorite-dark w-2/5 bg-primary py-2 text-white font-bold rounded-md flex items-center justify-center">Acessar</Link>
+                  <Link to={`/grupo/${group.id}/cliente/${id}`} className="hover:bg-meteorite-dark w-2/5 bg-primary py-2 text-white font-bold rounded-md flex items-center justify-center">Acessar</Link>
                 </div>
                 <DropdownMenu >
                   <DropdownMenuTrigger className="absolute top-0 right-0 p-3"><FontAwesomeIcon icon={faEllipsisH} /></DropdownMenuTrigger>
