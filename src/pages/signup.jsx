@@ -4,9 +4,9 @@ import axios from "axios";
 import api from "@/services/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock, faUser, faUserAlt, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { Toaster, toast } from 'sonner'
+import { toast } from 'sonner'
 import { useState, useEffect } from "react";
-import { Link, createHashRouter, useParams, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Signup() {
 

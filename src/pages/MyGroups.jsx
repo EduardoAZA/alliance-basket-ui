@@ -2,13 +2,11 @@ import Header from "@/components/Header"
 import { useState } from "react"
 import { useParams } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboard, faClipboardCheck, faClipboardList, faEllipsisH, faEllipsisV, faEye, faEyeSlash, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faClipboard, faEllipsisH, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useEffect } from "react";
@@ -25,6 +23,7 @@ export default function MyGroups() {
     description: '',
     id: ''
   });
+
   useEffect(() => {
     console.log("Making request to backend...");
     api.get(`/groups/clients/${id}`, { headers: { 'Authorization': localStorage.getItem('token') } })
@@ -32,10 +31,8 @@ export default function MyGroups() {
         setGroups(response.data);
         console.log("dentro");
         console.log(response.data); // Verifique se response.data tem os grupos corretamente
-
         // Array temporário para armazenar os dados dos grupos
         const tempGroupData = [];
-
         // Promessas das requisições para cada grupo
         const requests = response.data.map(group => {
           const idGroup = group.id_group;
@@ -54,7 +51,6 @@ export default function MyGroups() {
               console.error("Error fetching group:", error);
             });
         });
-        // Após todas as requisições serem concluídas, atualize o estado groupData
         Promise.all(requests)
           .then(() => {
             setGroupData(tempGroupData);
@@ -65,6 +61,19 @@ export default function MyGroups() {
         console.error("Error fetching groups for client:", error);
       });
   }, [id]);
+
+  function leaveGroup(idGroup) {
+    api.post(`groups/${idGroup}/clients/${id}`, idGroup , { headers: { 'Authorization': localStorage.getItem('token') } })
+      .then((response) => {
+        console.log(response.data)
+        console.log('deu boa')
+      })
+      .catch((error) => {
+        console.log(error)
+        console.log('deu ruim')
+      })
+  }
+
   return (
     <div className="h-screen flex flex-col box-border">
       <Header />
@@ -87,7 +96,7 @@ export default function MyGroups() {
                     <h1 className="text-gray-500 font-semibold text-lg  pt-3">Descrição</h1>
                   </div>
                   <p className="text-dark-primary pl-5 pr-5 pt-3 pb-6 mt-2 text-left text-sm ">{group.description}</p>
-                   </div>
+                </div>
                 <div className="flex flex-grow w-full  justify-center pb-6 items-end">
                   <Link to={`/grupo/${group.id}/cliente/${id}`} className="hover:bg-meteorite-dark w-2/5 bg-primary py-2 text-white font-bold rounded-md flex items-center justify-center">Acessar</Link>
                 </div>
@@ -97,7 +106,7 @@ export default function MyGroups() {
 
                     <DropdownMenuItem className="text-red-500 font-semibold flex items-center gap-4 ">
                       <FontAwesomeIcon icon={faRightFromBracket} />
-                      <p>Sair</p>
+                      <button onClick={() => leaveGroup(group.id)}>Sair</button>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
