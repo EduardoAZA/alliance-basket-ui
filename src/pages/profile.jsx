@@ -24,7 +24,6 @@ export default function Profile() {
     Aos.init();
   }, [])
 
-
   const { id } = useParams();
 
   useEffect(() => {
@@ -98,11 +97,11 @@ export default function Profile() {
 
   function handleSubmitPassword(event) {
     event.preventDefault();
-
-    if (!oldPassword || !user.password || !newPassword) {
-      toast.error("Preencha todos os campos")
-      return
-    }
+    
+     if (!confirmPassword || !newPassword.oldPassword || !newPassword.password) {
+       toast.error("Preencha todos os campos")
+       return
+     }
 
     if (newPassword.password !== confirmPassword) {
       toast.error("As senhas não coincidem.");
@@ -206,7 +205,7 @@ export default function Profile() {
                             onChange={handleChangeData}
                           />
                         </div>
-                        {/* <div>
+                        <div>
                           <label htmlFor="" className="outline-none text-dark  text-lg font-bold">Email</label>
                           <input
                             type="text"
@@ -215,7 +214,7 @@ export default function Profile() {
                             placeholder={user.email}
                             onChange={handleChangeData}
                           />
-                        </div> */}
+                        </div>
                       </div>
                       <button type="submit" className="w-2/5 bg-green-500 py-2 mt-5 text-white font-bold rounded-md hover:bg-green-700 transition-all duration-300">Salvar</button>
                     </form>
@@ -236,7 +235,7 @@ export default function Profile() {
                         <div className="">
                           <label htmlFor="" className="w-full border-none text-dark outline-nonerounded-md text-lg font-bold">Senha antiga</label>
                           <div className="relative">
-                            <input type={showPassword.oldPassword ? "text" : "password"} name="oldPassword" className="w-full p-2 border-none outline-none bg-gray-200 rounded-md" onChange={handleChangeOldPassword} />
+                            <input type={showPassword.oldPassword ? "text" : "password"} name="oldPassword" className="w-full p-2 border-none outline-none bg-gray-200 rounded-md" onChange={handleChangePassword} />
                             {showPassword.oldPassword ? (
                               <FontAwesomeIcon icon={faEye} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('oldPassword')} />
                             ) : (

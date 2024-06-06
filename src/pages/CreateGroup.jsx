@@ -3,7 +3,7 @@ import 'aos/dist/aos.css';
 import axios from "axios";
 import api from "@/services/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCheck, faClose, fa1, fa2, fa3, fa4, fa5, fa6 } from "@fortawesome/free-solid-svg-icons"
+import { faCheck,fa1, fa2, fa3, fa4, fa5, fa6 } from "@fortawesome/free-solid-svg-icons"
 import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form";
 import Header from "../components/Header"
@@ -11,17 +11,11 @@ import StepNumber from "../components/StepNumber"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { useParams } from "react-router-dom";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Check, Search } from "lucide-react";
-import Select from 'react-select'
-import makeAnimated from 'react-select/animated';
-import { Toaster, toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 export default function CreateGroup() {
 
@@ -33,17 +27,6 @@ export default function CreateGroup() {
   }, [])
 
   const { register, handleSubmit } = useForm();
-
-
-  const animatedComponents = makeAnimated();
-
-  const options = [
-    { value: 'Trabalho', label: 'Trabalho' },
-    { value: 'Viagem', label: 'Viagem' },
-    { value: 'Casa', label: 'Casa' },
-    { value: 'Evento', label: 'Evento' },
-    { value: 'Grupo', label: 'Grupo' },
-  ]
 
   const [inputValue, setInputValue] = useState('');
   const [values, setValues] = useState([]);
@@ -67,7 +50,7 @@ export default function CreateGroup() {
     setValues(newValues);
   };
 
-  function onSubmit(data, event) {
+  function onSubmit(data) {
     api.post(`/groups/clients/${id}`, data, { headers: { 'Authorization': localStorage.getItem('token') } })
       .then((response) => {
         console.log("Received response from backend:", response.data);
@@ -88,7 +71,6 @@ export default function CreateGroup() {
           <h1 className="font-bold text-6xl text-dark relative text-center">Criando seu <span className="text-primary-dark">grupo</span></h1>
           <p className="mt-4 text-2xl text-center text-meteorite-dark">Nossa plataforma permite que você crie grupos personalizados de forma simples e intuitiva. Siga os passos abaixo para criar o seu grupo:</p>
           <div className="py-10 grid grid-cols-3 gap-9">
-
             <StepNumber icon={fa1} groupName="Inserir Nome do Grupo:" content="Insira um nome significativo para identificar seu grupo. Certifique-se de escolher um título claro e fácil de lembrar." />
             <StepNumber icon={fa2} groupName="Descrição do Grupo" content="Descreva o propósito ou a missão do grupo. Destaque as principais atividades ou interesses compartilhados pelos membros." />
             <StepNumber icon={fa3} groupName="Tipo do Grupo:" content="Selecione o tipo de grupo que melhor se adapta à sua comunidade e seus propósitos." />
