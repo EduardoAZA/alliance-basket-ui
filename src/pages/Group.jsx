@@ -15,7 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-  DialogClose 
+  DialogClose
 } from "@/components/ui/dialog"
 import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form";
@@ -38,6 +38,7 @@ export default function Group() {
     api.get(`/groups/${idGroup}`, { headers: { 'Authorization': localStorage.getItem('token') } })
       .then((response) => {
         setGroupData(response.data)
+        console.log(groupData + "aqui duquinha")
       })
       .catch((error) => {
         console.error("Error fetching clients:", error);
@@ -129,7 +130,11 @@ export default function Group() {
                 </div>
                 <div className="flex gap-2 items-center">
                   <FontAwesomeIcon icon={faCircleCheck} className="text-success-dark font-black text-sm" />
-                  <p className="text-meteorite-dark text-sm">Todos os usuários podem criar despesas no grupo</p>
+                  {groupData.allow_edit === false ? (
+                    <p className="text-meteorite-dark text-sm">Apenas o adminstrador pode criar dívidas</p>
+                  ) : (
+                    <p className="text-meteorite-dark text-sm">Todos os membros podem criar dívidas.B</p>
+                  )}
                 </div>
               </div>
               <h1 className=" text-2xl font-bold ">Membros: {idValues.length} </h1>
@@ -142,7 +147,7 @@ export default function Group() {
 
             <div className="h-[20%] flex flex-col justify-end">
               <div className="flex items-center justify-center border-t-2 gap-2 relative">
-                <FormAddMember />
+                <FormAddMember id={id} idGroup={idGroup}/>
               </div>
               <div className="flex items-center justify-center border-t-2 gap-2 relative">
                 <FontAwesomeIcon className="text-lg text-red-500 font-bold absolute left-40" icon={faRightFromBracket} />

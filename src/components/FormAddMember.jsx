@@ -12,7 +12,10 @@ import {
 } from "@/components/ui/dialog"
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-export default function FormAddMember() {
+import { toast } from "sonner";
+import api from "@/services/api";
+
+export default function FormAddMember({ id, idGroup }) {
   const { register, handleSubmit } = useForm();
   const [inputValue, setInputValue] = useState('');
   const [values, setValues] = useState([]);
@@ -36,16 +39,23 @@ export default function FormAddMember() {
     setValues(newValues);
   };
 
-  function onSubmit(data) {
-    console.log(idGroup);
-    api.post(`/members/groups`, { ...data, idGroup }, { headers: { 'Authorization': localStorage.getItem('token') } })
+  const onSubmit = () => { 
+    // Criando um objeto com a estrutura esperada pela API
+    const dataToSend = {
+      invites: values,
+      idGroup: idGroup
+    };
+
+    // Envie os dados para a API
+    api.post(`members/clients/${id}/groups`, dataToSend, { headers: { 'Authorization': localStorage.getItem('token') } })
       .then((response) => {
-        console.log("Received response from backend:", response.data);
+        toast.success("Usuários adicionados com sucesso");
       })
       .catch((error) => {
-        console.error("Error fetching clients:", error);
+        toast.error(error)
       });
-  }
+  };
+
   return (
     <>
       <Dialog>
@@ -61,7 +71,7 @@ export default function FormAddMember() {
             <DialogDescription>Adicione integrantes ao seu grupo.</DialogDescription>
           </DialogHeader>
 
-          <form className="space-y-6" onSubmit={handleSubmit((data) => onSubmit({ ...data, invites: values }))}>
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex gap-10">
               <input
                 type="text"
@@ -85,7 +95,7 @@ export default function FormAddMember() {
               <DialogClose asChild>
                 <button className="border px-4 py-1 rounded-md font-semibold">Cancelar</button>
               </DialogClose>
-              <button className="border px-4 py-1 rounded-md bg-primary-dark font-semibold text-white">Adicionar</button>
+              <button type="submit" className="border px-4 py-1 rounded-md bg-primary-dark  font-semibold text-white">Adicionar</button>
             </DialogFooter>
           </form>
 

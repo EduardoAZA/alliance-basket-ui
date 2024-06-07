@@ -63,7 +63,7 @@ export default function MyGroups() {
   }, [id]);
 
   function leaveGroup(idGroup) {
-    api.post(`groups/${idGroup}/clients/${id}`, idGroup , { headers: { 'Authorization': localStorage.getItem('token') } })
+    api.post(`groups/${idGroup}/clients/${id}`,{} ,{ headers: { 'Authorization': localStorage.getItem('token') } })
       .then((response) => {
         console.log(response.data)
         console.log('deu boa')
