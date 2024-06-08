@@ -86,7 +86,8 @@ export default function Profile() {
 
   function updatePassoword(newPassword) {
     console.log(newData.email)
-    api.put(`/clients/${id}`, newPassword, { headers: { 'Authorization': localStorage.getItem('token') } })
+   
+    api.put(`/clients/${id}`, newPassword,{ headers: { 'Authorization': localStorage.getItem('token') } })
       .then((response) => {
         toast.success("Profile updated successfully");
       })
@@ -98,11 +99,11 @@ export default function Profile() {
 
   function handleSubmitPassword(event) {
     event.preventDefault();
-
-    if (!oldPassword || !user.password || !newPassword) {
-      toast.error("Preencha todos os campos")
-      return
-    }
+    console.log(oldPassword)
+    // if (!oldPassword || !user.password || !newPassword) {
+    //   toast.error("Preencha todos os campos")
+    //   return
+    // }
 
     if (newPassword.password !== confirmPassword) {
       toast.error("As senhas não coincidem.");
@@ -236,7 +237,7 @@ export default function Profile() {
                         <div className="">
                           <label htmlFor="" className="w-full border-none text-dark outline-nonerounded-md text-lg font-bold">Senha antiga</label>
                           <div className="relative">
-                            <input type={showPassword.oldPassword ? "text" : "password"} name="oldPassword" className="w-full p-2 border-none outline-none bg-gray-200 rounded-md" onChange={handleChangeOldPassword} />
+                            <input type={showPassword.oldPassword ? "text" : "password"} name="oldPassword" className="w-full p-2 border-none outline-none bg-gray-200 rounded-md" onChange={handleChangePassword} />
                             {showPassword.oldPassword ? (
                               <FontAwesomeIcon icon={faEye} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('oldPassword')} />
                             ) : (
