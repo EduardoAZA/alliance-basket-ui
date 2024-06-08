@@ -21,10 +21,12 @@ import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form";
 import { toast } from "sonner"
 import FormAddMember from "@/components/FormAddMember"
-
+import { Leaf } from "lucide-react"
+import { useNavigate } from "react-router-dom";
 export default function Group() {
   const { idGroup } = useParams()
   const { id } = useParams()
+  const navigate = useNavigate();
 
   const { register, handleSubmit } = useForm();
 
@@ -32,13 +34,18 @@ export default function Group() {
 
 
   const [groupData, setGroupData] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     console.log("Making request to backend...");
     api.get(`/groups/${idGroup}`, { headers: { 'Authorization': localStorage.getItem('token') } })
       .then((response) => {
         setGroupData(response.data)
-        console.log(groupData + "aqui duquinha")
+        if (response.data.admin_id?.toString() === id) {
+          setIsAdmin(true);
+        } else {
+          setIsAdmin(false);
+        }
       })
       .catch((error) => {
         console.error("Error fetching clients:", error);
@@ -51,6 +58,7 @@ export default function Group() {
     console.log("Fazendo requisição para o backend...");
     api.get(`/members/groups/${idGroup}`, { headers: { 'Authorization': localStorage.getItem('token') } })
       .then((response) => {
+
         console.log(response.data)
         const ids = response.data.map(item => item.id);
         setIdValues(ids);
@@ -113,6 +121,19 @@ export default function Group() {
   }
 
 
+  function leaveGroup() {
+    api.post(`groups/${idGroup}/clients/${id}`, {}, { headers: { 'Authorization': localStorage.getItem('token') } })
+      .then((response) => {
+        console.log(response.data)
+        navigate(`/meus-grupos/${id}`)
+        console.log('deu boa')
+      })
+      .catch((error) => {
+        console.log(error)
+        console.log('deu ruim')
+      })
+  }
+
 
   return (
     <div className="h-screen flex flex-col">
@@ -135,23 +156,27 @@ export default function Group() {
                   ) : (
                     <p className="text-meteorite-dark text-sm">Todos os membros podem criar dívidas.B</p>
                   )}
+
+
                 </div>
               </div>
               <h1 className=" text-2xl font-bold ">Membros: {idValues.length} </h1>
-              <div className=" min-h-52 overflow-y-auto  scrollbar-thin scrollbar-hidden border">
+              <div className=" min-h-52 overflow-y-auto  scrollbar-thin scrollbar-hidden ">
                 {usersName.map((nome, index) => (
-                  <Member key={index} nome={nome.name} />
+                  <Member key={index} nome={nome.name} isAdmin={isAdmin} id={id} idGroup={idGroup} />
                 ))}
               </div>
             </div>
 
             <div className="h-[20%] flex flex-col justify-end">
               <div className="flex items-center justify-center border-t-2 gap-2 relative">
-                <FormAddMember id={id} idGroup={idGroup}/>
+                <FormAddMember id={id} idGroup={idGroup} isAdmin={isAdmin} />
               </div>
               <div className="flex items-center justify-center border-t-2 gap-2 relative">
-                <FontAwesomeIcon className="text-lg text-red-500 font-bold absolute left-40" icon={faRightFromBracket} />
-                <button className="text-red-500 py-2 font-semibold rounded-bl-xl text-xl  w-full">Sair</button>
+                <button className="flex items-center justify-center gap-2 text-lg text-red-500 font-bold py-2 font-semibold rounded-bl-xl w-full" onClick={leaveGroup}>
+                  <FontAwesomeIcon icon={faRightFromBracket} />
+                  <p>Sair</p>
+                </button>
               </div>
             </div>
           </div>

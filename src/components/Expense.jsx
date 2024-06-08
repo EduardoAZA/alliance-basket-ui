@@ -24,6 +24,7 @@ export default function Expense({ data, nome, valor, pagante, idExpense }) {
     .catch((error) => {
       console.error("Erro ao excluir despesa:", error);
     });
+    window.location.reload()
   }
 
   const dataFormatada = new Date(data).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' });
