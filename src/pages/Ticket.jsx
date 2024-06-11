@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import CloseTicket from "@/components/CloseTicket";
 export default function Ticket() {
   const { id, idTicket } = useParams();
@@ -80,9 +80,17 @@ export default function Ticket() {
       <div className='overflow-y-auto h-[90vh] flex flex-col justify-center gap-5 items-center'>
         <h1 className="text-6xl font-bold ">Chat</h1>
         {infos.status === 'open' ?
-          <p className='text-green-500'>Aberto</p>
+          <div className="flex items-center gap-1 ">
+            <FontAwesomeIcon icon={faCircle} className="text-green-500 size-3" />
+            <p className='text-green-500 text-lg'>Aberto</p>
+
+          </div>
           :
-          <p className='text-red-500'>Fechado</p>
+          <div className="flex items-center gap-1 ">
+              <FontAwesomeIcon icon={faCircle} className="text-red-500 size-3" />
+              <p className='text-red-500 text-lg'>Fechado</p>
+          </div>
+         
         }
 
         <div className="flex flex-col w-[1200px] min-h-[36em] max-h-[36em] border shadow-mild ">
@@ -110,7 +118,7 @@ export default function Ticket() {
 
                 <div className="flex gap-10">
                   <input
-                    {...register("message", { required:true } )}
+                    {...register("message", { required: true })}
                     className="w-full rounded-md p-1 pl-3 text-lg font-semibold text-primary-dark"
                     placeholder="Digite sua mensagem"
                   />
