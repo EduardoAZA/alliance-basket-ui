@@ -114,7 +114,7 @@ export default function Ticket() {
 
           <div className="border-t p-2 ">
             {isAdmin ? (
-              <form onSubmit={handleSubmit((formData) => createMessage({ ...formData, from: user.email, to: 'vo@vo.vo' }))}>
+              <form onSubmit={handleSubmit((formData) => createMessage({ ...formData, from: user.email, to: infos.messages[0].from} ))}>
 
                 <div className="flex gap-10">
                   <input
