@@ -50,6 +50,9 @@ export default function FormAddMember({ id, idGroup, isAdmin }) {
     api.post(`members/clients/${id}/groups`, dataToSend, { headers: { 'Authorization': localStorage.getItem('token') } })
       .then((response) => {
         toast.success("Usuários adicionados com sucesso");
+        setTimeout(() => {
+          window.location.reload();
+        }, 400);
       })
       .catch((error) => {
         toast.error(error)

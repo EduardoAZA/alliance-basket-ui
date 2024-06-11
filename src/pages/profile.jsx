@@ -42,7 +42,7 @@ export default function Profile() {
 
   const [newData, setNewData] = useState({
     name: "",
-   // email: ""
+    // email: ""
   })
 
   const handleChangeData = (e) => {
@@ -60,12 +60,14 @@ export default function Profile() {
   function updateClient(newData) {
     api.put(`/clients/${id}`, newData, { headers: { 'Authorization': localStorage.getItem('token') } })
       .then((response) => {
-        setUser(response.data); // Atualiza os dados completos do usuário
-        toast.success("Profile updated successfully");
+        setUser(response.data); 
+        toast.success("Perfil atualizado com sucesso!");
+        setTimeout(() => {
+          window.location.reload();
+        }, 400);
       })
       .catch((error) => {
-        toast.error(error);
-        console.log("deu ruim")
+        toast.error("Email ja cadastrado.");
       });
   }
 
@@ -87,21 +89,23 @@ export default function Profile() {
     console.log(newData.email)
     api.put(`/clients/${id}`, newPassword, { headers: { 'Authorization': localStorage.getItem('token') } })
       .then((response) => {
-        toast.success("Profile updated successfully");
+        toast.success("Perfil atualizado com sucesso!");
+        setTimeout(() => {
+          window.location.reload();
+        }, 400);
       })
       .catch((error) => {
-        toast.error(error);
-        console.log("deu ruim")
+        toast.error("Senha anterior inválida.");
       });
   }
 
   function handleSubmitPassword(event) {
     event.preventDefault();
-    
-     if (!confirmPassword || !newPassword.oldPassword || !newPassword.password) {
-       toast.error("Preencha todos os campos")
-       return
-     }
+
+    if (!confirmPassword || !newPassword.oldPassword || !newPassword.password) {
+      toast.error("Preencha todos os campos")
+      return
+    }
 
     if (newPassword.password !== confirmPassword) {
       toast.error("As senhas não coincidem.");

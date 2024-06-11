@@ -38,7 +38,7 @@ export default function Expense({ data, nome, valor, pagante, idExpense }) {
     <div className="w-[70%] border rounded-md box-border p-3 relative">
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
-          <p className="font-bold">{dataFormatada}</p> {/* Usando a data formatada */}
+          <p className="font-bold">{dataFormatada}</p>
           <p className="">{nome}</p>
         </div>
         <div className="flex flex-col items-center capitalize">
@@ -46,7 +46,7 @@ export default function Expense({ data, nome, valor, pagante, idExpense }) {
           <p>R${valor},00</p>
         </div>
         <DropdownMenu >
-          <DropdownMenuTrigger className="absolute top-0 right-0 "><FontAwesomeIcon icon={faEllipsisH} /></DropdownMenuTrigger>
+          <DropdownMenuTrigger className="absolute top-0 right-1 "><FontAwesomeIcon icon={faEllipsisH} /></DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem className="text-red-500 font-semibold flex items-center gap-4 ">
               <FontAwesomeIcon icon={faRightFromBracket} />

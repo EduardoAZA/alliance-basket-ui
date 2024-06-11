@@ -3,7 +3,7 @@ import 'aos/dist/aos.css';
 import axios from "axios";
 import api from "@/services/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCheck,fa1, fa2, fa3, fa4, fa5, fa6 } from "@fortawesome/free-solid-svg-icons"
+import { faCheck, fa1, fa2, fa3, fa4, fa5, fa6 } from "@fortawesome/free-solid-svg-icons"
 import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form";
 import Header from "../components/Header"
@@ -26,7 +26,7 @@ export default function CreateGroup() {
     Aos.init();
   }, [])
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const [inputValue, setInputValue] = useState('');
   const [values, setValues] = useState([]);
@@ -98,16 +98,17 @@ export default function CreateGroup() {
                       <div className="flex flex-col text-xl ">
                         <label className="text-dark">Nome do grupo</label>
                         <input
-                          {...register("name", { required: true })}
+                          {...register("name", { required: "Nome do grupo é obrigatório" })}
                           className="border border-dark-primary rounded-sm pl-2"
                         />
+                        {errors.name && <p className="text-red-500 text-center">{errors.name.message}</p>}
                       </div>
                       <div className="flex flex-col text-xl ">
                         <label htmlFor="" className="text-dark ">Descrição</label>
                         <textarea  {...register("description")} className="border border-dark-primary rounded-sm resize-none h-40 p-2 border-grey-5800"></textarea>
                       </div>
                       <div className="flex flex-col text-xl ">
-                        <select {...register("type", { required: true })} className=" border border-dark-primary rounded-sm">
+                        <select {...register("type", { required: "Tipo do grupo é obrigatório" })} className=" border border-dark-primary rounded-sm">
                           <option value="">Tipo do grupo</option>
                           <option value="Trabalho">Trabalho</option>
                           <option value="Viagem">Viagem</option>
@@ -115,46 +116,46 @@ export default function CreateGroup() {
                           <option value="Evento">Evento</option>
                           <option value="Grupo">Grupo</option>
                         </select>
+                        {errors.type && <p className="text-red-500 text-center">{errors.type.message}</p>}
                       </div>
-                      <div className="pl-4 flex flex-col text-xl ">
+                      <div className="p2-4 flex flex-col text-xl ">
                         <div className="flex flex-col">
                           <label htmlFor="admin" className="flex gap-2">
                             <input
-                              {...register("allowEdit")}
+                              {...register("allowEdit", { required: "Selecione quem pode criar despesas" })}
                               type="radio"
                               value="false"
                               id="admin"
                             />
-                            Apenas o admnistrador pode criar despesas
+                            Apenas o administrador pode criar despesas
                           </label>
                           <label htmlFor="allUsers" className="flex gap-2">
                             <input
-                              {...register("allowEdit")}
+                              {...register("allowEdit", { required: "Selecione quem pode criar despesas" })}
                               type="radio"
                               value="true"
                               id="allUsers"
                             />
                             Todos os usuários podem criar despesas
                           </label>
+                          {errors.allowEdit && <p className="text-red-500 text-center">{errors.allowEdit.message}</p>}
                         </div>
-
-
                       </div>
                       <div>
-                        <div className="">
+                        <div>
                           <div className="flex gap-10">
                             <input
                               type="text"
                               value={inputValue}
                               onChange={handleChange}
-                              placeholder="Digite um valor"
+                              placeholder="Insira o email dos membros do grupo"
                               className="border border-dark-primary rounded-sm w-4/5 p-2 "
                             />
                             <button onClick={inviteSubmit} className="border-2 border-primary-dark rounded-sm px-3 text-primary-dark hover:bg-gray-200">Adicionar</button>
                           </div>
-                          <div>
+                          <div className="max-h-[8rem] overflow-y-auto scrollbar-thin scrollbar-hidden mt-4">
                             {values.map((value, index) => (
-                              <div key={index} className="flex mt-5 justify-between border-b border-primary-dark">
+                              <div key={index} className="flex mt-5 justify-between  border-primary-dark ">
                                 <p className="pb-2 text-lg font-bold">{value}</p>
                                 <button className="px-4 border bg-red-500 text-white hover:bg-red-600 rounded-md" onClick={(event) => inviteRemove(index, event)}>Remover</button>
                               </div>

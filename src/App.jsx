@@ -9,6 +9,8 @@ import Profile from './pages/profile';
 import Signup from './pages/signup';
 import MyGroups from './pages/MyGroups';
 import Group from './pages/Group';
+import Support from './pages/Support';
+import Ticket from './pages/Ticket';
 function App() {
   return (
     <div className="App">
@@ -20,6 +22,8 @@ function App() {
             <Route element={<MyGroups />} path="/meus-grupos/:id" exact />
             <Route element={<Profile />} path="/perfil/:id" exact />
             <Route element={<Group/>} path="/grupo/:idGroup/cliente/:id" exact/> 
+            <Route element={<Support/>} path="/suporte/:id" exact/>
+            <Route element={<Ticket/>} path="/suporte/:id/ticket/:idTicket" exact/>
           </Route>
           <Route element={<Login />} path="/login" />
           <Route element={<Home />} path="/" />
