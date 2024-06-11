@@ -11,10 +11,17 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useEffect } from "react";
 import api from "../services/api";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import Aos from "aos";
+import 'aos/dist/aos.css';
 
 export default function MyGroups() {
+  //Initializate AOS
+  useEffect(() => {
+    Aos.init();
+  }, [])
+
+
   const { id } = useParams()
   const [groups, setGroups] = useState([]);
   const [teste, setTeste] = useState('');
@@ -63,10 +70,11 @@ export default function MyGroups() {
   }, [id]);
 
   function leaveGroup(idGroup) {
-    api.post(`groups/${idGroup}/clients/${id}`,{} ,{ headers: { 'Authorization': localStorage.getItem('token') } })
+    api.post(`groups/${idGroup}/clients/${id}`, {}, { headers: { 'Authorization': localStorage.getItem('token') } })
       .then((response) => {
         console.log(response.data)
         console.log('deu boa')
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error)
@@ -78,7 +86,7 @@ export default function MyGroups() {
     <div className="h-screen flex flex-col box-border">
       <Header />
       <div className=" bg-primary-light flex-grow overflow-y-auto flex flex-col items-center">
-        <div className=" flex flex-col items-center justify-center ">
+        <div data-aos="fade-down" data-aos-duration="600" className=" flex flex-col items-center justify-center ">
           <div className="text-left my-10 w-full">
             <h1 className="text-5xl font-bold text-dark-primary">Meus grupos</h1>
 

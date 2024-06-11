@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { faB, faBars, faChain, faCheck, faClose, faLongArrowAltUp, faSignOut, faU, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faB, faBars, faChain, faCheck, faClose, faHeadphones, faHeadset, faLongArrowAltUp, faSignOut, faU, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link, useParams } from 'react-router-dom';
 import {
     DropdownMenu,
@@ -13,8 +13,21 @@ import {
 import { useNavigate } from "react-router-dom";
 import React, { useState } from 'react'
 import { useEffect } from 'react';
+import api from '@/services/api';
 
 export default function Header() {
+    const [userName, setUserName] = useState('');
+  
+     useEffect( () => {
+         api.get(`clients/${id}`, { headers: { 'Authorization': localStorage.getItem('token') } })
+             .then((res) => {
+            setUserName(res.data.name)
+             })
+             .catch((err) => {
+                 console.log(err)
+             })
+     })
+
     const navigate = useNavigate();
 
     const [open, setOpen] = useState(false);
@@ -49,15 +62,15 @@ export default function Header() {
                             {isLoggedIn ? (
                                 <>
                                     <li>
-                                        <Link to={`/criar-grupo/${id}`} className='font-bold text-lg cursor-pointer text-primary-dark hover:text-meteorite-dark transition-all duration-300 hover:text-xl hover:duration-200'>Criar grupo</Link>
+                                        <Link to={`/criar-grupo/${id}`} className='font-bold text-lg cursor-pointer text-meteorite-meteorite hover:text-meteorite-dark transition-all duration-300 hover:text-xl hover:duration-200'>Criar grupo</Link>
                                     </li>
                                     <li className='max-[767px]:pt-5'>
-                                        <Link to={`/meus-grupos/${id}`} className='font-bold text-lg cursor-pointer text-primary-dark hover:text-meteorite-dark transition-all duration-300 hover:text-xl hover:duration-200'>Meus grupos</Link>
+                                        <Link to={`/meus-grupos/${id}`} className='font-bold text-lg cursor-pointer text-meteorite-meteorite hover:text-meteorite-dark transition-all duration-300 hover:text-xl hover:duration-200'>Meus grupos</Link>
                                     </li>
                                 </>
                             ) : (
                                 <li>
-                                    <Link to="/criar-grupo" className='font-bold text-lg cursor-pointer text-primary-dark hover:text-meteorite-dark transition-all duration-300 hover:text-xl hover:duration-200'>Sobre nós</Link>
+                                    <Link to="/criar-grupo" className='font-bold text-lg cursor-pointer text-meteorite-meteorite hover:text-meteorite-dark transition-all duration-300 hover:text-xl hover:duration-200'>Sobre nós</Link>
                                 </li>
                             )}
                         </ul>
@@ -67,22 +80,29 @@ export default function Header() {
                     <div className=' flex items-center gap-4 pl-10 '>
                         {isLoggedIn ? (
                             <DropdownMenu>
-                                <DropdownMenuTrigger><Link to="/login" className='border-none outline-none bg-white'> <FontAwesomeIcon icon={faUser} className='text-xl cursor-pointer' /> </Link></DropdownMenuTrigger>
+                                <DropdownMenuTrigger><Link to="/login" className='border-none outline-none bg-white transition-all duration-300'> <p className='text-xl capitalize font-bold text-primary hover:text-primary-dark hover:text-2xl transition-all duration-300'>Ola, {userName}</p> </Link></DropdownMenuTrigger>
                                 <DropdownMenuContent className="w-[12rem] flex flex-col max-[500px]:w-[4rem]">
                                     <DropdownMenuLabel className="text-center">Meu perfil</DropdownMenuLabel>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem>
-                                        <Link to={`/perfil/${id}`} className='flex items-center gap-3'>
+                                        <Link to={`/perfil/${id}`} className='flex items-center gap-3 hover:text-primary-dark transition-all duration-300'>
                                             <FontAwesomeIcon icon={faUser} />
                                             Perfil
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem>
-                                        <Link className='flex items-center gap-3' onClick={handleLogout}>
+                                        <Link to={`/suporte/${id}`} className='flex items-center gap-3 hover:text-primary-dark transition-all duration-300'>
+                                            <FontAwesomeIcon icon={faHeadset} />
+                                            Suporte
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <Link className='flex items-center gap-3 hover:text-primary-dark transition-all duration-300' onClick={handleLogout}>
                                             <FontAwesomeIcon icon={faSignOut} />
                                             Sair
                                         </Link>
                                     </DropdownMenuItem>
+                                    
 
                                 </DropdownMenuContent>
                             </DropdownMenu>

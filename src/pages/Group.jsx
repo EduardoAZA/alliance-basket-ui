@@ -23,24 +23,29 @@ import { toast } from "sonner"
 import FormAddMember from "@/components/FormAddMember"
 import { Leaf } from "lucide-react"
 import { useNavigate } from "react-router-dom";
+import Aos from "aos";
+import 'aos/dist/aos.css';
+import CreateExpense from "@/components/CreateExpense"
 export default function Group() {
+  //Initializate AOS
+  useEffect(() => {
+    Aos.init();
+  }, [])
+
   const { idGroup } = useParams()
   const { id } = useParams()
   const navigate = useNavigate();
-
   const { register, handleSubmit } = useForm();
-
   const [groupID, setGroupID] = useState('');
-
-
   const [groupData, setGroupData] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
-
+  const [allow_Edit, setAllowEdit] = useState(false);
   useEffect(() => {
     console.log("Making request to backend...");
     api.get(`/groups/${idGroup}`, { headers: { 'Authorization': localStorage.getItem('token') } })
       .then((response) => {
         setGroupData(response.data)
+        setAllowEdit(response.data.allow_edit)
         if (response.data.admin_id?.toString() === id) {
           setIsAdmin(true);
         } else {
@@ -107,20 +112,6 @@ export default function Group() {
   }, [id]);
 
 
-  function createExpense(expenseValues) {
-    api.post(`expenses/client/${id}/group/${idGroup}`, expenseValues, { headers: { 'Authorization': localStorage.getItem('token') } })
-      .then((response) => {
-        // Atualiza o estado das despesas com a nova despesa criada
-        setExpenses([...expenses, response.data]);
-        // Exibe uma mensagem de sucesso
-        toast.success('Dispesa criada com sucesso');
-      })
-      .catch((error) => {
-        console.error("Error fetching clients:", error);
-      });
-  }
-
-
   function leaveGroup() {
     api.post(`groups/${idGroup}/clients/${id}`, {}, { headers: { 'Authorization': localStorage.getItem('token') } })
       .then((response) => {
@@ -138,8 +129,8 @@ export default function Group() {
   return (
     <div className="h-screen flex flex-col">
       <Header />
-      <div className="bg-white flex-grow overflow-y-auto flex flex-col items-center justify-center">
-        <div className=" w-[70%] h-[80%] border rounded-xl shadow-normal flex">
+      <div className="bg-white flex-grow overflow-y-auto flex flex-col items-center justify-center ">
+        <div data-aos="flip-up" data-aos-duration="600" className=" w-[70%] h-[80%] border rounded-xl shadow-normal flex">
           <div className="w-[30%] border-r h-full  flex flex-col ">
             <div className="h-[80%] p-5 flex flex-col gap-4">
               <div className="flex flex-col gap-5 ">
@@ -152,9 +143,9 @@ export default function Group() {
                 <div className="flex gap-2 items-center">
                   <FontAwesomeIcon icon={faCircleCheck} className="text-success-dark font-black text-sm" />
                   {groupData.allow_edit === false ? (
-                    <p className="text-meteorite-dark text-sm">Apenas o adminstrador pode criar dívidas</p>
+                    <p className="text-meteorite-dark text-sm">Apenas o adminstrador pode criar despesas.</p>
                   ) : (
-                    <p className="text-meteorite-dark text-sm">Todos os membros podem criar dívidas.B</p>
+                    <p className="text-meteorite-dark text-sm">Todos os membros podem criar despesas.</p>
                   )}
 
 
@@ -201,35 +192,7 @@ export default function Group() {
                   )}
                 </div>
                 <div className="flex gap-10 w-full justify-center pt-2">
-                  <Dialog>
-                    <DialogTrigger>
-                      <p className="py-2 bg-primary-dark px-8 rounded-md text-white font-semibold">Criar despesa</p>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Adicionar Despesa</DialogTitle>
-                        <DialogDescription>Crie agora sua despesa</DialogDescription>
-                      </DialogHeader>
-
-                      <form className="space-y-6" onSubmit={handleSubmit(createExpense)}>
-                        <div className="grid grid-cols-4 items-center text-right gap-3">
-                          <label htmlFor="name" className="font-semibold">Nome</label>
-                          <input   {...register("name", { required: true })} className="col-span-3 border p-1 rounded-md" id="name" />
-                        </div>
-
-                        <div className="grid grid-cols-4 items-center text-right gap-3" >
-                          <label htmlFor="name" className="font-semibold">Valor</label>
-                          <input  {...register("value", { required: true })} className="col-span-3 border p-1 rounded-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" type="text" id="name" />
-                        </div>
-                        <DialogFooter><DialogClose asChild>
-                          <button className="border px-4 py-1 rounded-md font-semibold">Cancelar</button>
-                        </DialogClose>
-                          <button className="border px-4 py-1 rounded-md bg-primary-dark font-semibold text-white">Criar</button>
-                        </DialogFooter>
-                      </form>
-
-                    </DialogContent>
-                  </Dialog>
+                  <CreateExpense id={id} idGroup={idGroup} isAdmin={isAdmin} allow_Edit={allow_Edit}/>
                   <Dialog>
                     <DialogTrigger>
                       <p className="py-2 bg-red-500 px-8 rounded-md text-white font-semibold">Quitar dívida</p>
@@ -239,22 +202,6 @@ export default function Group() {
                         <DialogTitle>Quitar dívida</DialogTitle>
                         <DialogDescription>Escolha o usuário e o valor que será quitado.</DialogDescription>
                       </DialogHeader>
-                      {/* 
-                      <form className="space-y-6">
-                        <div className="grid grid-cols-4 items-center text-right gap-3">
-                  
-                        </div>
-                        <div className="grid grid-cols-4 items-center text-right gap-3" >
-                          <label htmlFor="name" className="font-semibold">Valor</label>
-                          <input className="col-span-3 border p-1 rounded-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" type="number" id="name" />
-                        </div>
-
-                        <DialogFooter>
-                          <button className="border px-4 py-1 rounded-md font-semibold">Cancelar</button>
-                          <button className="border px-4 py-1 rounded-md bg-primary-dark font-semibold text-white">Pagar</button>
-                        </DialogFooter>
-                      </form> */}
-
                     </DialogContent>
                   </Dialog>
                 </div>

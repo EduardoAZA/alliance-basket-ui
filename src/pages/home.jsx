@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <div className='m-0 p-0 box-border h-100 flex flex-col'>
       <Header />
-      <div className='flex-grow: 1;overflow-y:auto; h-[90vh] flex justify-center items-center'>
+      <div className='overflow-y-auto h-[90vh] flex justify-center items-center'>
         <div data-aos="flip-up" data-aos-duration="600" className="w-[80%] h-[80%] rounded-2xl flex" >
           <div className="w-[50%] flex flex-col justify-center items-center">
             <h1 className="text-6xl pb-3 text-dark font-bold">Sua plataforma inovadora de <span className="text-primary">controle de gastos</span></h1>
