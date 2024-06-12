@@ -7,40 +7,42 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import api from "@/services/api";
-
-export default function Member({ nome, isAdmin, id, idGroup }) {
-
+import { useState } from "react";
+import { toast } from "sonner";
+export default function Member({ nome, isAdmin, id, idGroup, idUser }) {
   function RemoveCliente() {
-    api.delete(`/members/groups/${idGroup}/clients/${id}`, { headers: { 'Authorization': localStorage.getItem('token') } })
+    api.delete(`groups/${idGroup}`, { data: { idClient: Number(id), idMember: Number(idUser) }, headers: { 'Authorization': localStorage.getItem('token') } })
       .then((res) => {
-        console.log(res)
-        console.log('deu boa')
+        toast.success('Usuario removido com sucesso')
+        setTimeout(() => {
+          window.location.reload()
+        }, 400);
       })
       .catch((err) => {
-        console.log(err)
-      })
+        console.error(err);
+      });
   }
-
 
   return (
     <div className="relative p-4">
       <p>{nome}</p>
-      {isAdmin &&
-        (
-          <DropdownMenu>
-            <DropdownMenuTrigger className="absolute top-1 right-2">
-              <FontAwesomeIcon icon={faEllipsisH} />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem className="text-red-500 font-semibold flex items-center gap-2">
-                <button className="flex items-center gap-2" onClick={RemoveCliente}>
-                  <FontAwesomeIcon icon={faX} />
-                  <p>Remover</p>
-                </button>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
+      {isAdmin && (id != idUser) && (
+        <DropdownMenu>
+          <DropdownMenuTrigger className="absolute top-1 right-2">
+            <FontAwesomeIcon icon={faEllipsisH} />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem className="text-red-500 font-semibold flex items-center gap-2">
+              <button className="flex items-center gap-2" onClick={RemoveCliente}>
+                <FontAwesomeIcon icon={faX} />
+                <p>Remover</p>
+              </button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
+
+
     </div>
   );
 }

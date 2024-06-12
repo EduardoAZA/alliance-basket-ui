@@ -67,8 +67,12 @@ export default function Support() {
   useEffect(() => {
     api.get(`/tickets/clients/${id}`, { headers: { 'Authorization': localStorage.getItem('token') } })
       .then((res) => {
-        setTicket(res.data)
-        const idsTickets = res.data.map(ticket => ticket.id);
+        const uniqueTickets = res.data.reduce((unique, ticket) => {
+          return unique.some((t) => t.id === ticket.id) ? unique : [...unique, ticket];
+        }, []);
+
+        setTicket(uniqueTickets);
+        const idsTickets = uniqueTickets.map(ticket => ticket.id);
         setIdTickets(idsTickets);
       })
       .catch((err) => {
@@ -104,24 +108,24 @@ export default function Support() {
       <Header />
       <div className={isAdmin ? 'overflow-y-auto h-[90vh] flex justify-center ' : 'overflow-y-auto h-[90vh] flex justify-center items-center'}>
         {isAdmin ? (
-          <div className="w-[1000px] mt-10">
+          <div className="w-[1000px] mt-10 overflow-y-auto scrollbar-thin scrollbar-hidden">
             <h1 className="text-5xl font-bold text-center">Tickets</h1>
             <div>
               {sortedAdminTickets.map((ticket, index) => (
                 <div className="flex flex-col gap-2 border rounded-md mt-5 p-2" key={index}>
-                  <div className="flex justify-between">
-                    <div>
+                  <div className="flex justify-evenly">
+                    <div className="w-1/3">
                       <p className="text-xl">{new Date(ticket.createdAt).toLocaleDateString('pt-BR')}</p>
-                      <h1 className="text-xl font-bold">{ticket.title}</h1>
+                      <h1 className="text-xl font-bold  overflow-hidden whitespace-nowrap">{ticket.title}</h1>
                     </div>
-                    <div className="flex flex-col items-center ">
+                    <div className="flex flex-col items-center w-1/3">
                       <p className="text-lg">{ticket.type}</p>
                       <p className={(ticket.status === 'open') ? 'text-green-500 capitalize ' : 'text-red-500 capitalize'}>
                         {ticket.status === 'open' && <p>Aberto</p>}
                         {ticket.status === 'resolved' && <p>Fechado</p>}
                       </p>
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex justify-end items-center w-1/3 ">
                       <Link to={`/suporte/${id}/ticket/${ticket.id}`} className="bg-success-dark p-2 rounded-md text-white font-semibold flex justify-center transition-all duration-300 hover:bg-success">
                         Visualizar
                       </Link>
@@ -130,8 +134,8 @@ export default function Support() {
                 </div>
               ))}
             </div>
-
           </div>
+
         ) : (
           <div className="w-[1600px] flex min-h-[70%]">
             <div className="w-3/5 p-5 flex flex-col justify-center gap-6">
@@ -209,6 +213,7 @@ export default function Support() {
             <div className="w-2/5 flex flex-col p-12 max-h-[36em] overflow-y-auto scrollbar-thin scrollbar-hidden">
               <h1 className="text-3xl">Meus tickets</h1>
               {tickets.map((ticket, index) => (
+
                 <div className="flex flex-col gap-2 border rounded-md mt-5 p-2" key={index}>
                   <div className="flex justify-between">
                     <div>
