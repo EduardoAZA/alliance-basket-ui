@@ -21,11 +21,23 @@ import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form";
 import { toast } from "sonner"
 import FormAddMember from "@/components/FormAddMember"
-import { Leaf } from "lucide-react"
 import { useNavigate } from "react-router-dom";
 import Aos from "aos";
 import 'aos/dist/aos.css';
 import CreateExpense from "@/components/CreateExpense"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { User } from "lucide-react"
+
 export default function Group() {
   //Initializate AOS
   useEffect(() => {
@@ -57,13 +69,27 @@ export default function Group() {
       });
   }, [id]);
 
+  const [divida, setDivida] = useState('')
+  useEffect(() => {
+    api.get(`expenses/client/${id}/group/${idGroup}/howmuchiowe`, { headers: { 'Authorization': localStorage.getItem('token') } })
+      .then((res) => {
+        console.log('boa')
+        console.log(res.data)
+        setDivida(res.data)
+
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [id])
+
   const [users, setUsers] = useState([])
   const [idValues, setIdValues] = useState([]);
   useEffect(() => {
     console.log("Fazendo requisição para o backend...");
     api.get(`/members/groups/${idGroup}`, { headers: { 'Authorization': localStorage.getItem('token') } })
       .then((response) => {
-
+        console.log("aqui duca")
         console.log(response.data)
         const ids = response.data.map(item => item.id);
         setIdValues(ids);
@@ -154,7 +180,7 @@ export default function Group() {
               <h1 className=" text-2xl font-bold ">Membros: {idValues.length} </h1>
               <div className=" min-h-52 overflow-y-auto  scrollbar-thin scrollbar-hidden ">
                 {usersName.map((nome, index) => (
-                  <Member key={index} nome={nome.name} isAdmin={isAdmin} id={id} idGroup={idGroup} />
+                  <Member key={index} nome={nome.name} isAdmin={isAdmin} id={id} idGroup={idGroup} idUser={nome.id} />
                 ))}
               </div>
             </div>
@@ -164,16 +190,71 @@ export default function Group() {
                 <FormAddMember id={id} idGroup={idGroup} isAdmin={isAdmin} />
               </div>
               <div className="flex items-center justify-center border-t-2 gap-2 relative">
-                <button className="flex items-center justify-center gap-2 text-lg text-red-500 font-bold py-2 font-semibold rounded-bl-xl w-full" onClick={leaveGroup}>
-                  <FontAwesomeIcon icon={faRightFromBracket} />
-                  <p>Sair</p>
-                </button>
+                <AlertDialog>
+                  <AlertDialogTrigger className="flex items-center justify-center gap-2 text-lg text-red-500  py-2 font-semibold rounded-bl-xl w-full">
+                    <FontAwesomeIcon icon={faRightFromBracket} />
+                    <p>Sair</p>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle className="text-red-500">Você tem certeza?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Esta ação removerá você do grupo e você perderá acesso às conversas e atividades futuras. Tem certeza de que deseja continuar?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                      <AlertDialogAction className="text-white hover:bg-meteorite-dark" onClick={leaveGroup}>Sair</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+
               </div>
             </div>
           </div>
 
           <div className="w-[70%] relative">
-            <button className="absolute top-5 right-5 w-12 h-12 border rounded-full bg-meteorite-dark text-white font-bold"><FontAwesomeIcon className="text-2xl" icon={faHandHoldingDollar} /></button>
+            <button className="absolute top-3 right-3 rounded-md border text-white font-bold">
+              {divida.totalAmountOwed >= 0 ? (
+                <Dialog>
+                  <DialogTrigger className="text-black flex gap-2 p-2 bg-gray-200">
+                    Saldo:{" "}
+                    <p className="text-green-500">
+                      {new Intl.NumberFormat("pt-BR", {
+                        style: "currency",
+                        currency: "BRL"
+                      }).format(Math.abs(divida.totalAmountOwed).toFixed(2))}
+                    </p>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Dívidas</DialogTitle>
+                      <DialogDescription>Veja aqui os débitos do grupo.</DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
+              ) : (
+                <Dialog>
+                  <DialogTrigger className="text-black flex gap-2 p-2 bg-gray-200">
+                    Saldo:{" "}
+                    <p className="text-red-500">
+                      {new Intl.NumberFormat("pt-BR", {
+                        style: "currency",
+                        currency: "BRL"
+                      }).format(Math.abs(divida.totalAmountOwed).toFixed(2))}
+                    </p>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Dívidas</DialogTitle>
+                      <DialogDescription>Veja aqui os débitos do grupo.</DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
+              )}
+            </button>
+
+
             <div className="flex flex-col gap-6 justify-between">
 
               <h1 className="text-6xl font-bold text-center text-dark-primary">Despesas</h1>
@@ -192,7 +273,7 @@ export default function Group() {
                   )}
                 </div>
                 <div className="flex gap-10 w-full justify-center pt-2">
-                  <CreateExpense id={id} idGroup={idGroup} isAdmin={isAdmin} allow_Edit={allow_Edit}/>
+                  <CreateExpense id={id} idGroup={idGroup} isAdmin={isAdmin} allow_Edit={allow_Edit} />
                   <Dialog>
                     <DialogTrigger>
                       <p className="py-2 bg-red-500 px-8 rounded-md text-white font-semibold">Quitar dívida</p>

@@ -77,23 +77,33 @@ export default function Ticket() {
   return (
     <div className='m-0 p-0 box-border h-100 flex flex-col'>
       <Header />
-      <div className='overflow-y-auto h-[90vh] flex flex-col justify-center gap-5 items-center'>
-        <h1 className="text-6xl font-bold ">Chat</h1>
-        {infos.status === 'open' ?
-          <div className="flex items-center gap-1 ">
-            <FontAwesomeIcon icon={faCircle} className="text-green-500 size-3" />
-            <p className='text-green-500 text-lg'>Aberto</p>
+      <div className='overflow-y-auto h-[90vh] flex flex-col justify-center gap-2 items-center'>
+        <div className="flex items-end justify-between w-[1200px]">
 
-          </div>
-          :
-          <div className="flex items-center gap-1 ">
-              <FontAwesomeIcon icon={faCircle} className="text-red-500 size-3" />
-              <p className='text-red-500 text-lg'>Fechado</p>
-          </div>
-         
-        }
+          <div className="flex flex-col gap-2">
+            <h1 className="text-6xl font-bold capitalize">{infos.title}</h1>
+            {infos.status === 'open' ?
+              <div className="flex items-center gap-1 ">
+                <FontAwesomeIcon icon={faCircle} className="text-green-500 size-3" />
+                <p className='text-green-500 text-lg'>Aberto</p>
 
-        <div className="flex flex-col w-[1200px] min-h-[36em] max-h-[36em] border shadow-mild ">
+              </div>
+              :
+              <div className="flex items-center gap-1 ">
+                <FontAwesomeIcon icon={faCircle} className="text-red-500 size-3" />
+                <p className='text-red-500 text-lg'>Fechado</p>
+              </div>
+
+            }
+          </div>
+          {isAdmin && infos.status !== 'resolved' && (
+            <div>
+              <CloseTicket idTicket={idTicket} id={id} />
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-col w-[1200px] min-h-[36em] max-h-[36em] border rounded-md shadow-mild ">
           <div className=" p-5 h-[90%] max-h-[90%]  overflow-y-auto scrollbar-thin scrollbar-hidden">
             <div className="flex flex-col gap-4">
               {messages.map((message, index) => (
@@ -103,7 +113,7 @@ export default function Ticket() {
                     <p className="font-bold">{message.from}</p>
                     <p className="absolute bottom-0 right-2">{formattedTime(new Date(message.createdAt))}</p>
                     <div className='flex justify-start'>
-                      <p>{message.message}</p>
+                      <p className="pb-3">{message.message}</p>
                     </div>
                   </div>
                 </div>
@@ -114,15 +124,23 @@ export default function Ticket() {
 
           <div className="border-t p-2 ">
             {isAdmin ? (
-              <form onSubmit={handleSubmit((formData) => createMessage({ ...formData, from: user.email, to: infos.messages[0].from} ))}>
+              <form onSubmit={handleSubmit((formData) => createMessage({ ...formData, from: user.email, to: infos.messages[0].from }))}>
 
-                <div className="flex gap-10">
-                  <input
-                    {...register("message", { required: true })}
-                    className="w-full rounded-md p-1 pl-3 text-lg font-semibold text-primary-dark"
-                    placeholder="Digite sua mensagem"
-                  />
-                  <button className="hover:bg-gray-300 transition-all duration-300 rounded-md p-2" type="submit">
+                <div className="flex gap-2">
+                  {infos.status !== 'resolved' ?
+                    <input
+                      {...register("message", { required: true })}
+                      className="w-full rounded-md p-1 pl-3 text-lg font-semibold text-primary-dark"
+                      placeholder="Digite sua mensagem"
+                    /> :
+                    <input
+                      {...register("message", { required: true })}
+                      className="w-full rounded-md p-1 pl-3 text-lg font-semibold text-primary-dark"
+                      placeholder="Digite sua mensagem"
+                      readOnly
+                    />}
+
+                  <button className="hover:bg-gray-400 transition-all duration-300 rounded-md bg-gray-300 p-3" type="submit">
                     <FontAwesomeIcon icon={faPaperPlane} />
                   </button>
                 </div>
@@ -143,12 +161,6 @@ export default function Ticket() {
             )}
           </div>
         </div>
-        {isAdmin && infos.status !== 'resolved' && (
-          <div>
-            <CloseTicket idTicket={idTicket} id={id} />
-          </div>
-        )}
-
       </div>
     </div>
   );
