@@ -37,7 +37,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { User } from "lucide-react"
-
+import QuitarDivida from "@/components/QuitarDivida"
 export default function Group() {
   //Initializate AOS
   useEffect(() => {
@@ -151,7 +151,10 @@ export default function Group() {
       })
   }
 
+  
 
+
+  
   return (
     <div className="h-screen flex flex-col">
       <Header />
@@ -274,17 +277,7 @@ export default function Group() {
                 </div>
                 <div className="flex gap-10 w-full justify-center pt-2">
                   <CreateExpense id={id} idGroup={idGroup} isAdmin={isAdmin} allow_Edit={allow_Edit} />
-                  <Dialog>
-                    <DialogTrigger>
-                      <p className="py-2 bg-red-500 px-8 rounded-md text-white font-semibold">Quitar dívida</p>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Quitar dívida</DialogTitle>
-                        <DialogDescription>Escolha o usuário e o valor que será quitado.</DialogDescription>
-                      </DialogHeader>
-                    </DialogContent>
-                  </Dialog>
+                  <QuitarDivida id={id} idGroup={idGroup}/>
                 </div>
               </div>
             </div>
