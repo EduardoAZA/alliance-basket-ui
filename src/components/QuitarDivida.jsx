@@ -20,6 +20,7 @@ export default function QuitarDivida({ id, idGroup }) {
     });
 
     const [user, setUser] = useState(null); // Estado para armazenar os dados do usuário
+    const [users, setUsers] = useState({}); // Estado para armazenar os nomes dos usuários correspondentes aos IDs
 
     useEffect(() => {
         console.log("Making request to backend...");
@@ -32,6 +33,25 @@ export default function QuitarDivida({ id, idGroup }) {
                 console.log('Erro ao obter dados de dívida:', err);
             });
 
+        // Busca os nomes dos clientes com base nos IDs
+        Promise.all(Object.keys(divida.amountsOwedToMembers).map(clientId => (
+            api.get(`/clients/${clientId}`, { headers: { 'Authorization': localStorage.getItem('token') } })
+                .then(response => ({
+                    id: clientId,
+                    name: response.data.name
+                }))
+                .catch(error => ({
+                    id: clientId,
+                    name: `Cliente ${clientId}`
+                }))
+        ))).then(users => {
+            const usersObj = users.reduce((acc, user) => {
+                acc[user.id] = user.name;
+                return acc;
+            }, {});
+            setUsers(usersObj);
+        });
+
         // Busca o nome do cliente com base no ID
         api.get(`/clients/${id}`, { headers: { 'Authorization': localStorage.getItem('token') } })
             .then((response) => {
@@ -41,7 +61,7 @@ export default function QuitarDivida({ id, idGroup }) {
             .catch((error) => {
                 console.error("Error fetching client:", error);
             });
-    }, [id, idGroup]);
+    }, [id, idGroup, divida.amountsOwedToMembers]);
 
     const { register, handleSubmit, setValue } = useForm();
 
@@ -108,7 +128,7 @@ export default function QuitarDivida({ id, idGroup }) {
                                 <option value="">Selecione o usuário</option>
                                 {Object.entries(divida.amountsOwedToMembers).map(([key, value]) => (
                                     <option key={key} value={key}>
-                                        {user ? `${user.name} - Valor: ${value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}` : `ID ${key} - Valor: ${value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`}
+                                        {`${users[key] || `Cliente ${key}`} - Valor: ${value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`}
                                     </option>
                                 ))}
                             </select>
