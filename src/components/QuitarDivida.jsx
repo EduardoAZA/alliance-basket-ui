@@ -19,41 +19,58 @@ export default function QuitarDivida({ id, idGroup }) {
         amountsOwedToMembers: {}
     });
 
-    const [user, setUser] = useState(null); // Estado para armazenar os dados do usuário
-    const [users, setUsers] = useState({}); // Estado para armazenar os nomes dos usuários correspondentes aos IDs
+    const [user, setUser] = useState(null);
+    const [users, setUsers] = useState({}); 
+    const [isDebtLoaded, setIsDebtLoaded] = useState(false); // Controle de carregamento da dívida
 
     useEffect(() => {
-        console.log("Making request to backend...");
-        api.get(`expenses/client/${id}/group/${idGroup}/howmuchiowe`, { headers: { 'Authorization': localStorage.getItem('token') } })
+        console.log("Making request to backend for debt...");
+        api.get(`expenses/client/${id}/group/${idGroup}/howmuchiowe`, {
+            headers: { 'Authorization': localStorage.getItem('token') }
+        })
             .then((res) => {
                 console.log('Resposta da API de dívida:', res.data);
                 setDivida(res.data);
+                setIsDebtLoaded(true); // Marca que a dívida foi carregada
             })
             .catch((err) => {
                 console.log('Erro ao obter dados de dívida:', err);
             });
+    }, [id, idGroup]); // Depende apenas de id e idGroup
 
-        // Busca os nomes dos clientes com base nos IDs
-        Promise.all(Object.keys(divida.amountsOwedToMembers).map(clientId => (
-            api.get(`/clients/${clientId}`, { headers: { 'Authorization': localStorage.getItem('token') } })
-                .then(response => ({
-                    id: clientId,
-                    name: response.data.name
-                }))
-                .catch(error => ({
-                    id: clientId,
-                    name: `Cliente ${clientId}`
-                }))
-        ))).then(users => {
-            const usersObj = users.reduce((acc, user) => {
-                acc[user.id] = user.name;
-                return acc;
-            }, {});
-            setUsers(usersObj);
-        });
+    useEffect(() => {
+        if (isDebtLoaded) {
+            console.log("Making request to backend for user names...");
+            const fetchUsers = async () => {
+                const usersData = await Promise.all(Object.keys(divida.amountsOwedToMembers).map(clientId =>
+                    api.get(`/clients/${clientId}`, {
+                        headers: { 'Authorization': localStorage.getItem('token') }
+                    })
+                        .then(response => ({
+                            id: clientId,
+                            name: response.data.name
+                        }))
+                        .catch(error => ({
+                            id: clientId,
+                            name: `Cliente ${clientId}`
+                        }))
+                ));
+                const usersObj = usersData.reduce((acc, user) => {
+                    acc[user.id] = user.name;
+                    return acc;
+                }, {});
+                setUsers(usersObj);
+            };
 
-        // Busca o nome do cliente com base no ID
-        api.get(`/clients/${id}`, { headers: { 'Authorization': localStorage.getItem('token') } })
+            fetchUsers();
+        }
+    }, [divida.amountsOwedToMembers, isDebtLoaded]); // Depende de amountsOwedToMembers e isDebtLoaded
+
+    useEffect(() => {
+        console.log("Making request to backend for client info...");
+        api.get(`/clients/${id}`, {
+            headers: { 'Authorization': localStorage.getItem('token') }
+        })
             .then((response) => {
                 console.log("Received response from backend:", response.data);
                 setUser(response.data);
@@ -61,7 +78,7 @@ export default function QuitarDivida({ id, idGroup }) {
             .catch((error) => {
                 console.error("Error fetching client:", error);
             });
-    }, [id, idGroup, divida.amountsOwedToMembers]);
+    }, [id]); // Depende apenas de id
 
     const { register, handleSubmit, setValue } = useForm();
 
@@ -97,7 +114,6 @@ export default function QuitarDivida({ id, idGroup }) {
         setValue("amount", selectedValue);
     }
 
-    // Remove o sinal de menos do valor total da dívida
     const formattedTotalAmount = divida.totalAmountOwed >= 0 ? divida.totalAmountOwed.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : (-divida.totalAmountOwed).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
     return (
