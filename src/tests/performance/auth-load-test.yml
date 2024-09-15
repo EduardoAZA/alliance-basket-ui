@@ -1,0 +1,30 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - name: "Warm-up phase"
+      arrivalRate: 5
+      duration: 10
+    - name: "Ramp-up phase"
+      arrivalRate: 5
+      duration: 60
+      rampTo: 20
+
+scenarios:
+  - name: "Access login page"
+    flow:
+      - get:
+          url: "/login"
+  - name: "Fetch token"
+    flow:
+      - post:
+          name: "Fetch token"
+          url: "http://localhost:8080/api/clients/login"
+          json:
+            email: "felipeengler@outlook.com"
+            password: "Senha!2345"
+          capture:
+            - json: "$.token"
+              as: "token"
+            - json: "$.user.id"
+              as: "id"
+#      - log: "Token: {{ token }}, id: {{ id }}"

@@ -1,0 +1,50 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - name: "Warm-up phase"
+      arrivalRate: 5
+      duration: 10
+    - name: "Ramp-up phase"
+      arrivalRate: 5
+      duration: 60
+      rampTo: 20
+
+scenarios:
+  - name: "Logging in, creating and deleting a group"
+    flow:
+      - get:
+          name: "Access login page"
+          url: "/login"
+      - post:
+          name: "Fetch token"
+          url: "http://localhost:8080/api/clients/login"
+          json:
+            email: "felipeengler@outlook.com"
+            password: "Senha!2345"
+          capture:
+            - json: "$.token"
+              as: "token"
+            - json: "$.user.id"
+              as: "id"
+#      - log: "Token: {{ token }}, id: {{ id }}"
+      - post:
+          name: "Create group"
+          url: "http://localhost:8080/api/groups/clients/{{ id }}"
+          json:
+            name: "test-group-load"
+            type: "Outros"
+            description: "load test"
+            allowEdit: "false"
+            invites: "[]"
+          capture:
+            - json: "$.group.id"
+              as: "groupId"
+          headers:
+            Content-Type: "application/json"
+            Authorization: "{{ token }}"
+#      - log: "ID GRUPO: {{ groupId }}"
+      - delete:
+          name: "Delete group"
+          url: "http://localhost:8080/api/groups/{{ groupId }}/clients/{{ id }}"
+          headers:
+            Authorization: "{{ token }}"
