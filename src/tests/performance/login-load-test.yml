@@ -1,0 +1,15 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - name: "Warm-up phase"
+      arrivalRate: 5
+      duration: 10
+    - name: "Ramp-up phase"
+      arrivalRate: 5
+      duration: 60
+      rampTo: 20
+scenarios:
+  - name: "Access login page"
+    flow:
+      - get:
+          url: "/login"

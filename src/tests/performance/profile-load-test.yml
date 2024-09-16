@@ -1,0 +1,46 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - name: "Warm-up phase"
+      arrivalRate: 5
+      duration: 10
+    - name: "Ramp-up phase"
+      arrivalRate: 5
+      duration: 60
+      rampTo: 20
+
+scenarios:
+  - name: "Logging in and changing password"
+    flow:
+      - post:
+          name: "Fetch token"
+          url: "http://localhost:8080/api/clients/login"
+          headers:
+            Content-Type: "application/json"
+          json:
+            email: "felipeengler@outlook.com"
+            password: "Senha!2345"
+          capture:
+            - json: "$.token"
+              as: "token"
+            - json: "$.user.id"
+              as: "id"
+#      - log: "Token: {{ token }}, id: {{ id }}"
+      - put:
+          name: "Update password"
+          url: "http://localhost:8080/api/clients/{{ id }}"
+          headers:
+            Content-Type: "application/json"
+            Authorization: "{{ token }}"
+          json:
+            oldPassword: "Senha!2345"
+            password: "Senha!23456"
+      - put:
+          name: "Update to old password"
+          url: "http://localhost:8080/api/clients/{{ id }}"
+          headers:
+            Content-Type: "application/json"
+            Authorization: "{{ token }}"
+          json:
+            oldPassword: "Senha!23456"
+            password: "Senha!2345"
