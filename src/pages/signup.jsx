@@ -29,59 +29,41 @@ export default function Signup() {
     })
   }
 
-  function createUser(details) {
+   function createUser(details) {
     api.post('/clients', details)
-      .then((response) => {
-        localStorage.setItem('token', response.data.token)
-        const id = response.data.user.id
-        return navigate(`/${id}`)
-      })
-      .catch((error) => {
-        toast.error("Email ja cadastrado", error);
-      });
+        .then((response) => {
+          localStorage.setItem('token', response.data.token);
+          const id = response.data.user.id;
+          return navigate(`/${id}`);
+        })
+        .catch((error) => {
+          // Acessando diretamente as propriedades de error.response.data
+          if (error.response && error.response.data && error.response.data.name) {
+            switch (error.response.data.name) {
+              case "RequiredFieldException":
+                toast.error(`${error.response.data.message}`); // Exibe a mensagem e o campo do erro
+                break;
+              case "InvalidFieldException":
+                toast.error(`${error.response.data.message}`);
+                break;
+              case "UserExistsException":
+                toast.error(`${error.response.data.message}`);
+                break;
+              default:
+                toast.error(`${error.response.data.message}`);
+                break;
+            }
+          } else {
+            // Caso o erro não tenha a estrutura esperada
+            toast.error("Erro desconhecido. Tente novamente.");
+          }
+        });
   }
+
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const isEmpty = Object.values(details).some(value => value === '');
-    if (isEmpty) {
-      toast.error("Por favor, preencha todos os campos.");
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(details.email)) {
-      toast.error("Por favor, insira um email válido.");
-      return;
-    }
-
-    if (details.password !== details.confirmPassword) {
-      toast.error("As senhas não coincidem.");
-      return;
-    }
-
-    // Verificação de caracteres
-    if (details.password.length < 8) {
-      toast.error("Sua senha deve conter ao menos 8 caracteres ")
-      return;
-    }
-
-    // Verificação de letra maiscula
-    if (!/[A-Z]/.test(details.password)) {
-      toast.error("Sua senha deve conter uma letra Maiúscula");
-      return;
-    }
-
-    //Verificação de caracter especial
-    if (!/[^a-zA-Z0-9]/.test(details.password)) {
-      toast.error("Sua senha deve conter pelo menos um caractere especial");
-      return;
-    }
-
-    if (!/[0-9]/.test(details.password)) {
-      toast.error("Sua senha deve conter ao menos um número")
-      return;
-    }
     createUser(details);
   }
 
