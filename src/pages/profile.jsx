@@ -4,6 +4,7 @@ import Header from "../components/Header"
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import axios from "axios";
+import { Input } from "@/components/ui/input"
 import { useParams } from "react-router-dom";
 import {
   Dialog,
@@ -169,9 +170,7 @@ export default function Profile() {
   return (
     <div className="h-screen flex flex-col ">
       <Header />
-      <div data-aos="zoom-in" data-aos-duration="600" className="absolute bottom-6 right-6 z-10"><img src="/src/assets/images/profile.svg" className=" w-[20rem]" /></div>
-      <div data-aos="zoom-in" data-aos-duration="600" className="absolute top-24 left-6 z-10"><img src="/src/assets/images/profile-2.svg" className=" w-[20rem]" /></div>
-
+    
       <div className="flex-grow overflow-y-auto flex flex-col items-center justify-center">
         <div data-aos="zoom-in" data-aos-duration="600" className="shadow-mild w-[25%]  flex flex-col items-center p-10 justify-between z-50 bg-white">
           <div className="flex flex-col items-center gap-4">
@@ -181,17 +180,17 @@ export default function Profile() {
           <div className="w-full flex flex-col gap-8">
             <div className="w-full flex flex-col gap-2">
               <p className="text-xl font-bold">Nome</p>
-              <input type="text" className="w-full p-2 border-none outline-none bg-primary-light rounded-md" placeholder={user.name} readOnly />
+              <Input type="text" className="w-full p-2 border-none outline-none bg-primary-light rounded-md" placeholder={user.name} readOnly />
             </div>
             <div className="w-full flex flex-col gap-2">
               <p className="text-xl font-bold">Email</p>
-              <input type="text" className="w-full p-2 border-none outline-none bg-primary-light rounded-md" placeholder={user.email} readOnly />
+              <Input type="text" className="w-full p-2 border-none outline-none bg-primary-light rounded-md" placeholder={user.email} readOnly />
             </div>
           </div>
-          <div className="flex gap-12 w-full mt-5">
+          <div className="flex flex-col gap-4 w-full mt-5">
             <Dialog>
-              <DialogTrigger className="w-3/5 ">
-                <p className="w-full hover:bg-meteorite-dark py-3 bg-primary text-sm text-white font-bold rounded-md">Editar</p>
+              <DialogTrigger>
+                <p className="w-full hover:bg-meteorite-dark py-3 bg-primary text-sm duration-300 text-white font-bold rounded-md">Editar Nome/Email</p>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px] bg-primary-light">
                 <DialogHeader>
@@ -201,7 +200,7 @@ export default function Profile() {
                       <div className="w-full flex flex-col mt-5 gap-5">
                         <div>
                           <label htmlFor="" className="w-full border-none outline-none text-dark rounded-md text-lg font-bold">Nome</label>
-                          <input
+                          <Input
                             type="text"
                             className="w-full p-2 border-none outline-none bg-gray-200 rounded-md"
                             name="name"
@@ -211,7 +210,7 @@ export default function Profile() {
                         </div>
                         <div>
                           <label htmlFor="" className="outline-none text-dark  text-lg font-bold">Email</label>
-                          <input
+                          <Input
                             type="text"
                             className="w-full p-2 border-none outline-none bg-gray-200 rounded-md"
                             name="email"
@@ -227,8 +226,8 @@ export default function Profile() {
               </DialogContent>
             </Dialog>
             <Dialog>
-              <DialogTrigger className="w-3/5">
-                <p className="w-full hover:bg-meteorite-dark py-3 bg-primary text-sm text-white font-bold rounded-md" >Alterar senha</p>
+              <DialogTrigger>
+                <p className="w-full hover:bg-meteorite-dark duration-300 hover:text-white py-3  border border-primary text-sm text-primary  font-bold rounded-md" >Alterar senha</p>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px] bg-primary-light">
                 <DialogHeader>
@@ -239,7 +238,7 @@ export default function Profile() {
                         <div className="">
                           <label htmlFor="" className="w-full border-none text-dark outline-nonerounded-md text-lg font-bold">Senha antiga</label>
                           <div className="relative">
-                            <input type={showPassword.oldPassword ? "text" : "password"} name="oldPassword" className="w-full p-2 border-none outline-none bg-gray-200 rounded-md" onChange={handleChangePassword} />
+                            <Input type={showPassword.oldPassword ? "text" : "password"} name="oldPassword" className="w-full p-2 border-none outline-none bg-gray-200 rounded-md" onChange={handleChangePassword} />
                             {showPassword.oldPassword ? (
                               <FontAwesomeIcon icon={faEye} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('oldPassword')} />
                             ) : (
@@ -250,7 +249,7 @@ export default function Profile() {
                         <div>
                           <label htmlFor="" className="outline-none text-lg font-bold text-dark ">Nova senha</label>
                           <div className="relative">
-                            <input type={showPassword.password ? "text" : "password"} name="password" onChange={handleChangePassword} className="w-full p-2 border-none outline-none bg-gray-200 rounded-md" />
+                            <Input type={showPassword.password ? "text" : "password"} name="password" onChange={handleChangePassword} className="w-full p-2 border-none outline-none bg-gray-200 rounded-md" />
                             {showPassword.password ? (
                               <FontAwesomeIcon icon={faEye} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('password')} />
                             ) : (
@@ -261,7 +260,7 @@ export default function Profile() {
                         <div>
                           <label htmlFor="" className="outline-none text-lg font-bold text-dark ">Confirmação da senha</label>
                           <div className="relative">
-                            <input type={showPassword.confirmPassword ? "text" : "password"} name="confirmPassword" onChange={handleChangeConfirmPassword} className="w-full p-2 border-none outline-none bg-gray-200 rounded-md" />
+                            <Input type={showPassword.confirmPassword ? "text" : "password"} name="confirmPassword" onChange={handleChangeConfirmPassword} className="w-full p-2 border-none outline-none bg-gray-200 rounded-md" />
                             {showPassword.confirmPassword ? (
                               <FontAwesomeIcon icon={faEye} className="absolute top-3 right-2 cursor-pointer" onClick={() => handleTogglePasswordVisibility('confirmPassword')} />
                             ) : (

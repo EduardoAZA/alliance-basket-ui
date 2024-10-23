@@ -22,6 +22,7 @@ export default function Signup() {
     email: '',
     password: ''
   })
+  
   const handleChange = (event) => {
     const { name, value } = event.target
     setDetails((prev) => {
@@ -29,35 +30,35 @@ export default function Signup() {
     })
   }
 
-   function createUser(details) {
+  function createUser(details) {
     api.post('/clients', details)
-        .then((response) => {
-          localStorage.setItem('token', response.data.token);
-          const id = response.data.user.id;
-          return navigate(`/${id}`);
-        })
-        .catch((error) => {
-          // Acessando diretamente as propriedades de error.response.data
-          if (error.response && error.response.data && error.response.data.name) {
-            switch (error.response.data.name) {
-              case "RequiredFieldException":
-                toast.error(`${error.response.data.message}`); // Exibe a mensagem e o campo do erro
-                break;
-              case "InvalidFieldException":
-                toast.error(`${error.response.data.message}`);
-                break;
-              case "UserExistsException":
-                toast.error(`${error.response.data.message}`);
-                break;
-              default:
-                toast.error(`${error.response.data.message}`);
-                break;
-            }
-          } else {
-            // Caso o erro não tenha a estrutura esperada
-            toast.error("Erro desconhecido. Tente novamente.");
+      .then((response) => {
+        localStorage.setItem('token', response.data.token);
+        const id = response.data.user.id;
+        return navigate(`/${id}`);
+      })
+      .catch((error) => {
+        // Acessando diretamente as propriedades de error.response.data
+        if (error.response && error.response.data && error.response.data.name) {
+          switch (error.response.data.name) {
+            case "RequiredFieldException":
+              toast.error('Necessário preencher todos os campos');
+              break;
+            case "InvalidFieldException":
+              toast.error('Campo de email inválido');
+              break;
+            case "UserExistsException":
+              toast.error('Este email já esta associado à um usuário.');
+              break;
+            default:
+              toast.error(`${error.response.data.message}`);
+              break;
           }
-        });
+        } else {
+          // Caso o erro não tenha a estrutura esperada
+          toast.error("Erro desconhecido. Tente novamente.");
+        }
+      });
   }
 
 
@@ -81,19 +82,23 @@ export default function Signup() {
   return (
     <>
       <div data-aos="zoom-in" data-aos-duration="600" className="absolute top-6 left-6">
-        <Link to="/home" className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
+        <Link to="/" className='font-bold text-3xl text-primary-dark hover:text-primary transition-all duration-300'> AllianceBasket</Link>
       </div>
       <div className="w-full h-screen flex items-center justify-center bg-gradient-to-b from-white via-primary-light to-primary ">
         <div data-aos="zoom-in" data-aos-duration="600" className="w-3/5 h-3/5  flex bg-white rounded-3xl shadow-md" >
           <div className="w-1/2 h-full flex flex-col justify-center items-center bg-primary rounded-tl-3xl rounded-bl-3xl rounded-tr-[60px] rounded-br-[60px]">
-            <h1 className="text-white text-3xl font-bold">Seja bem-vindo</h1>
+            <h1 className="text-white text-3xl font-semibold">Já tem uma conta?</h1>
+            <p className="text-white opacity-85">Faça login para acessar sua conta</p>
+        
 
-            <div className="flex flex-col text-center pt-[5%] gap-1 text-lg text-white">
-              <p>Caso você ja tenha uma conta</p>
-              <p>Clique para entrar no botão abaixo</p>
-            </div>
+              <p className="text-lg max-w-[480px] text-center mt-4 text-white" >
+                Se você já possui uma conta, clique no botão abaixo para fazer login.
+                </p>
+          
 
-            <Link to="/login" className="w-1/2 text-lg text-center font-semibold p-[10px] rounded-md border-none outline-none bg-white text-primary mt-[5%] hover:bg-primary-light  "> Entrar</Link>
+            <Link to="/login" className="w-1/2  hover:bg-gray-300 text-center font-semibold p-[10px] rounded-md border-none outline-none bg-white text-primary mt-[5%] ">
+              Ir para login
+            </Link>
           </div>
           <div className="w-1/2 h-full flex flex-col items-center justify-center">
             <div className="relative font-bold after:content-[''] after:w-10 after:h-1 after:rounded-sm after:bg-primary after:absolute after:bottom-[-12px] after:left-1/2 after:translate-x-[-50%]">
@@ -159,7 +164,7 @@ export default function Signup() {
 
 
                 </div>
-                
+
               </div>
               <button className="w-3/5 text-lg font-medium p-3 rounded-md outline-none border-none bg-primary text-white hover:bg-meteorite-dark transition-all duration-300 mt-[7%]" type="submit">Cadastrar</button>
             </form>

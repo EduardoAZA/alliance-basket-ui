@@ -10,7 +10,7 @@ import {
   DialogFooter,
   DialogClose
 } from "@/components/ui/dialog"
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons"
+import { faPlusCircle, faUserPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { toast } from "sonner";
 import api from "@/services/api";
@@ -63,10 +63,9 @@ export default function FormAddMember({ id, idGroup, isAdmin }) {
     <>
       {isAdmin && (
         <Dialog>
-          <DialogTrigger className="flex items-center justify-center border-t-2 gap-2 relative w-full">
-            <button className="py-2 flex outline-none border-none items-center gap-2 font-semibold text-xl">
-              <FontAwesomeIcon className="text-lg text-green-500 font-bold" icon={faPlusCircle} />
-              <p className="text-green-600">Adicionar Membro</p>
+          <DialogTrigger className="flex items-center justify-center border rounded-md bg-primary text-white gap-2 relative w-full">
+            <button className="py-2 flex outline-none border-none items-center gap-2 font-semibold text-base">
+              <p className="">Adicionar Membro</p>
             </button>
           </DialogTrigger>
           <DialogContent>
@@ -81,14 +80,14 @@ export default function FormAddMember({ id, idGroup, isAdmin }) {
                   type="text"
                   value={inputValue}
                   onChange={handleChange}
-                  placeholder="Digite um valor"
+                  placeholder="Digite o email do usuário"
                   className="border w-4/5 p-2"
                 />
                 <button onClick={inviteSubmit} className="border px-3">Adicionar</button>
               </div>
               <div>
                 {values.map((value, index) => (
-                  <div key={index} className="flex mt-5 justify-between border-b border-primary-dark">
+                  <div key={index} className="flex mt-5 justify-between  border-primary-dark">
                     <p className="pb-2 text-lg font-bold">{value}</p>
                     <button className="px-4 border bg-red-500 text-white hover:bg-red-600 rounded-md" onClick={(event) => inviteRemove(index, event)}>Remover</button>
                   </div>
@@ -106,6 +105,7 @@ export default function FormAddMember({ id, idGroup, isAdmin }) {
           </DialogContent>
         </Dialog>
       )}
+
     </>
   )
 }

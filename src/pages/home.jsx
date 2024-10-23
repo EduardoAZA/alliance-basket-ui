@@ -33,7 +33,7 @@ export default function Home() {
 
           </div>
           <div className="w-[50%] flex justify-center items-center">
-            <img src="https://hubify.com.br/wp-content/uploads/2017/04/criar-um-site.jpg" alt="Imagem representativa do site" className="w-[70%] h-[70%]" />
+            <img src="../src/assets/images/landing_page.png" alt="Imagem representativa do site" className="w-[60%] h-[60%]" />
           </div>
         </div>
       </div>

@@ -62,10 +62,10 @@ export default function Header() {
                             {isLoggedIn ? (
                                 <>
                                     <li>
-                                        <Link to={`/criar-grupo/${id}`} className='font-bold text-lg cursor-pointer text-meteorite-meteorite hover:text-meteorite-dark transition-all duration-300 hover:text-xl hover:duration-200'>Criar grupo</Link>
+                                        <Link to={`/criar-grupo/${id}`} className='font-bold text-lg cursor-pointer text-primary hover:text-meteorite-dark transition-all duration-300 hover:text-xl hover:duration-200'>Criar grupo</Link>
                                     </li>
                                     <li className='max-[767px]:pt-5'>
-                                        <Link to={`/meus-grupos/${id}`} className='font-bold text-lg cursor-pointer text-meteorite-meteorite hover:text-meteorite-dark transition-all duration-300 hover:text-xl hover:duration-200'>Meus grupos</Link>
+                                        <Link to={`/meus-grupos/${id}`} className='font-bold text-lg cursor-pointer text-primary hover:text-meteorite-dark transition-all duration-300 hover:text-xl hover:duration-200'>Meus grupos</Link>
                                     </li>
                                 </>
                             ) : (

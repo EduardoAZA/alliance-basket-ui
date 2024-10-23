@@ -12,6 +12,7 @@ import {
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button"
 
 export default function QuitarDivida({ id, idGroup }) {
     const [divida, setDivida] = useState({
@@ -20,7 +21,7 @@ export default function QuitarDivida({ id, idGroup }) {
     });
 
     const [user, setUser] = useState(null);
-    const [users, setUsers] = useState({}); 
+    const [users, setUsers] = useState({});
     const [isDebtLoaded, setIsDebtLoaded] = useState(false); // Controle de carregamento da dívida
 
     useEffect(() => {
@@ -120,9 +121,7 @@ export default function QuitarDivida({ id, idGroup }) {
         <>
             <Dialog>
                 <DialogTrigger asChild>
-                    <button className="py-2 bg-red-500 px-8 rounded-md text-white font-semibold">
-                        Quitar dívida
-                    </button>
+                    <Button className="w-full mt-4 text-white">Quitar dívida</Button>
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
@@ -156,9 +155,9 @@ export default function QuitarDivida({ id, idGroup }) {
                                 placeholder="Valor"
                             />
                         </div>
-                        <button type="submit" className="w-2/5 bg-green-500 py-2 mt-5 text-white font-bold rounded-md hover:bg-green-700 transition-all duration-300">
-                            Pagar
-                        </button>
+                        <div className="flex justify-center mt-5 text-white">
+                            <Button type="submit" className="w-3/5">Pagar </Button>
+                        </div>
                     </form>
                 </DialogContent>
             </Dialog>

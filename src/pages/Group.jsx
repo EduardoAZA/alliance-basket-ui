@@ -1,10 +1,12 @@
 
 import Header from "@/components/Header"
-import { faCircleCheck, faRightFromBracket, faHandHoldingDollar } from "@fortawesome/free-solid-svg-icons"
+import { faCircleCheck, faRightFromBracket, faHandHoldingDollar, faDoorOpen, faUser, faDollar, faCirclePlus, faUserPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useParams } from "react-router-dom"
+import { Form, useParams } from "react-router-dom"
 import Expense from "@/components/Expense"
 import Member from "@/components/Member"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import axios from "axios";
 import api from "@/services/api";
 import {
@@ -17,6 +19,7 @@ import {
   DialogFooter,
   DialogClose
 } from "@/components/ui/dialog"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form";
 import { toast } from "sonner"
@@ -38,6 +41,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { User } from "lucide-react"
 import QuitarDivida from "@/components/QuitarDivida"
+import { faUsb } from "@fortawesome/free-brands-svg-icons"
 export default function Group() {
   //Initializate AOS
   useEffect(() => {
@@ -150,143 +154,132 @@ export default function Group() {
         console.log('deu ruim')
       })
   }
-
-  
-
-
-  
   return (
     <div className="h-screen flex flex-col">
       <Header />
-      <div className="bg-white flex-grow overflow-y-auto flex flex-col items-center justify-center ">
-        <div data-aos="flip-up" data-aos-duration="600" className=" w-[70%] h-[80%] border rounded-xl shadow-normal flex">
-          <div className="w-[30%] border-r h-full  flex flex-col ">
-            <div className="h-[80%] p-5 flex flex-col gap-4">
-              <div className="flex flex-col gap-5 ">
-                <h1 className="text-4xl font-bold text-center text-meteorite-dark">{groupData.name}</h1>
-                <div>
-                  <h1 className=" text-2xl font-bold text-dark-primary">Descrição</h1>
-                  <p>{groupData.description}</p>
+      <div className="container mx-auto p-10">
 
-                </div>
-                <div className="flex gap-2 items-center">
-                  <FontAwesomeIcon icon={faCircleCheck} className="text-success-dark font-black text-sm" />
-                  {groupData.allow_edit === false ? (
-                    <p className="text-meteorite-dark text-sm">Apenas o adminstrador pode criar despesas.</p>
-                  ) : (
-                    <p className="text-meteorite-dark text-sm">Todos os membros podem criar despesas.</p>
-                  )}
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold">{groupData.name}</h1>
+          <AlertDialog>
+            <AlertDialogTrigger className="border rounded-md px-5 py-2 flex items-center gap-2">
+              <FontAwesomeIcon icon={faRightFromBracket} />
+              <p>Sair Do Grupo</p>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-red-500">Você tem certeza?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Esta ação removerá você do grupo e você perderá acesso às conversas e atividades futuras. Tem certeza de que deseja continuar?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction className="text-white hover:bg-meteorite-dark" onClick={leaveGroup}>Sair</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
 
+        <p className="text-muted-foreground mb-6">{groupData.description}</p>
 
-                </div>
-              </div>
-              <h1 className=" text-2xl font-bold ">Membros: {idValues.length} </h1>
-              <div className=" min-h-52 overflow-y-auto  scrollbar-thin scrollbar-hidden ">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <Card data-aos="zoom-in" data-aos-duration="600">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FontAwesomeIcon icon={faUser} />
+                Membros: {idValues.length}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+
+              <div className=" min-h-52 overflow-y-auto capitalize scrollbar-thin scrollbar-hidden ">
                 {usersName.map((nome, index) => (
                   <Member key={index} nome={nome.name} isAdmin={isAdmin} id={id} idGroup={idGroup} idUser={nome.id} />
                 ))}
               </div>
-            </div>
 
-            <div className="h-[20%] flex flex-col justify-end">
-              <div className="flex items-center justify-center border-t-2 gap-2 relative">
+              <div className="flex items-center gap-2 mt-4">
                 <FormAddMember id={id} idGroup={idGroup} isAdmin={isAdmin} />
               </div>
-              <div className="flex items-center justify-center border-t-2 gap-2 relative">
-                <AlertDialog>
-                  <AlertDialogTrigger className="flex items-center justify-center gap-2 text-lg text-red-500  py-2 font-semibold rounded-bl-xl w-full">
-                    <FontAwesomeIcon icon={faRightFromBracket} />
-                    <p>Sair</p>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle className="text-red-500">Você tem certeza?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Esta ação removerá você do grupo e você perderá acesso às conversas e atividades futuras. Tem certeza de que deseja continuar?
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                      <AlertDialogAction className="text-white hover:bg-meteorite-dark" onClick={leaveGroup}>Sair</AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+            </CardContent>
+          </Card>
 
-              </div>
-            </div>
-          </div>
 
-          <div className="w-[70%] relative">
-            <button className="absolute top-3 right-3 rounded-md border text-white font-bold">
+          <Card data-aos="zoom-in" data-aos-duration="600">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FontAwesomeIcon icon={faDollar} />
+                Saldo
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
               {divida.totalAmountOwed >= 0 ? (
-                <Dialog>
-                  <DialogTrigger className="text-black flex gap-2 p-2 bg-gray-200">
-                    Saldo:{" "}
-                    <p className="text-green-500">
-                      {new Intl.NumberFormat("pt-BR", {
-                        style: "currency",
-                        currency: "BRL"
-                      }).format(Math.abs(divida.totalAmountOwed).toFixed(2))}
-                    </p>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Dívidas</DialogTitle>
-                      <DialogDescription>Veja aqui os débitos do grupo.</DialogDescription>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
-              ) : (
-                <Dialog>
-                  <DialogTrigger className="text-black flex gap-2 p-2 bg-gray-200">
-                    Saldo:{" "}
-                    <p className="text-red-500">
-                      {new Intl.NumberFormat("pt-BR", {
-                        style: "currency",
-                        currency: "BRL"
-                      }).format(Math.abs(divida.totalAmountOwed).toFixed(2))}
-                    </p>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Dívidas</DialogTitle>
-                      <DialogDescription>Veja aqui os débitos do grupo.</DialogDescription>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
-              )}
-            </button>
+                <p className="text-primary-dark text-3xl font-bold">
+                  {new Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: "BRL"
+                  }).format(Math.abs(divida.totalAmountOwed).toFixed(2))}
+                </p>
+              ) :
+                (
+                  <p className="text-red-500 text-3xl font-bold">
+                    {new Intl.NumberFormat("pt-BR", {
+                      style: "currency",
+                      currency: "BRL"
+                    }).format(Math.abs(divida.totalAmountOwed).toFixed(2))}
+                  </p>
+                )}
 
+              <QuitarDivida id={id} idGroup={idGroup} />
+            </CardContent>
 
-            <div className="flex flex-col gap-6 justify-between">
+          </Card>
 
-              <h1 className="text-6xl font-bold text-center text-dark-primary">Despesas</h1>
-              <div className="flex flex-col items-center gap-5">
-                <div className="w-full h-[20%]">
-                  {expenses.length === 0 ? (
-                    <div className="max-h-[31rem] min-h-[31rem] flex justify-center">
-                      <p className="text-center border-b border-primary p-5 text-3xl text-primary h-1/3">Adicione sua primeira despesa</p>
+          <Card data-aos="zoom-in" data-aos-duration="600">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FontAwesomeIcon icon={faCirclePlus} />
+                Criar Despesa
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CreateExpense id={id} idGroup={idGroup} isAdmin={isAdmin} allow_Edit={allow_Edit} />
+            </CardContent>
+          </Card>
+
+          <Card className="mt-6 md:col-span-3"  data-aos="zoom-in" data-aos-duration="600">
+            <CardHeader>
+              <CardTitle>Lista de Despesas</CardTitle>
+            </CardHeader>
+            <CardContent>
+
+              {expenses.length > 0 ? (
+                <>
+                  {expenses.slice().reverse().map((expense, index) => (
+                    <div >
+                      <Expense
+                        key={index}
+                        nome={expense.name}
+                        valor={expense.value}
+                        data={expense.createdAt}
+                        idExpense={expense.id}
+                        pagante={usersName.find(cliente => cliente.id === expense.id_client)?.name}
+                      />
                     </div>
-                  ) : (
-                    <div className="w-full h-full max-h-[31rem] min-h-[31rem] overflow-y-auto scrollbar-thin scrollbar-hidden flex flex-col items-center gap-5">
-                      {expenses.slice().reverse().map((expense, index) => (
-                        <Expense key={index} nome={expense.name} valor={expense.value} data={expense.createdAt} idExpense={expense.id} pagante={usersName.find(cliente => cliente.id === expense.id_client)?.name} />
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <div className="flex gap-10 w-full justify-center pt-2">
-                  <CreateExpense id={id} idGroup={idGroup} isAdmin={isAdmin} allow_Edit={allow_Edit} />
-                  <QuitarDivida id={id} idGroup={idGroup}/>
-                </div>
-              </div>
-            </div>
-          </div>
+                  ))}
+                </>
+              ) : null}
 
+            </CardContent>
 
+          </Card>
 
         </div>
-      </div>
-    </div>
+
+
+      </div >
+    </div >
   )
 }

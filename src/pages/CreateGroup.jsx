@@ -27,7 +27,6 @@ export default function CreateGroup() {
   }, [])
 
   const { register, handleSubmit, formState: { errors } } = useForm();
-
   const [inputValue, setInputValue] = useState('');
   const [values, setValues] = useState([]);
 
